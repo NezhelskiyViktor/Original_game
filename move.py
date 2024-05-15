@@ -24,10 +24,6 @@ def run_move(screen):
         if not handle_events():
             pg.mixer.music.stop()
             return
-        # for event in pg.event.get():
-        #     if event.type == pg.QUIT:
-        #         pg.mixer.music.stop()
-        #         return
         # Формируем имя файла текущего кадра
         frame_name = f'move/frame{frame_number:04d}.jpg'
 
