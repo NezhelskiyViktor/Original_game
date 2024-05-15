@@ -19,8 +19,10 @@ if __name__ == '__main__':
     screen = pg.display.set_mode((window_width, window_height))
     pg.display.set_caption("Оригинальная игра")
 
+    # Показ видеозаставки начала игры
     move.run_move(screen)
 
+    # Запуск основного цикла игры
     game = GameEngine()
     game.run(screen)
     pg.quit()

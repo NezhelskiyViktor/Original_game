@@ -1,5 +1,6 @@
 import pygame as pg
 import time
+from game.input_handler import handle_events
 
 
 def run_move(screen):
@@ -20,10 +21,13 @@ def run_move(screen):
     frame_number = 1
 
     while (time.time() - start_time) < total_time:
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                pg.mixer.music.stop()
-                return
+        if not handle_events():
+            pg.mixer.music.stop()
+            return
+        # for event in pg.event.get():
+        #     if event.type == pg.QUIT:
+        #         pg.mixer.music.stop()
+        #         return
         # Формируем имя файла текущего кадра
         frame_name = f'move/frame{frame_number:04d}.jpg'
 
