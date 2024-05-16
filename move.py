@@ -44,5 +44,6 @@ def run_move(screen):
 
     # Остановка воспроизведения звука
     pg.mixer.music.stop()
+    pg.mixer.music.unload()
     return
 
