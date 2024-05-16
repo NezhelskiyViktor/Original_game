@@ -4,13 +4,6 @@ from game.input_handler import handle_events
 
 
 def run_move(screen):
-    # Загрузка звука
-    pg.mixer.init()
-    pg.mixer.music.load('move/intro.mp3')
-
-    # Запуск воспроизведения звука
-    pg.mixer.music.play()
-
     # Время отображения каждого изображения (в секундах)
     interval = 0.18
     total_time = 28  # Общее время отображения (в секундах)
@@ -19,6 +12,13 @@ def run_move(screen):
     # Основной цикл отображения изображений
     start_time = time.time()
     frame_number = 1
+
+    # Загрузка звука
+    pg.mixer.init()
+    pg.mixer.music.load('move/intro.mp3')
+
+    # Запуск воспроизведения звука
+    pg.mixer.music.play()
 
     while (time.time() - start_time) < total_time:
         if not handle_events():
