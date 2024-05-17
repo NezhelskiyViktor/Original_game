@@ -7,15 +7,22 @@ def load_fonts():
     return font28, font22
 
 
+def load_background():
+    bg = []
+    bg.append(pg.image.load('res/graphics/fon_03.jpg').convert())
+    bg.append(pg.image.load('res/graphics/backfon.jpg').convert())
+    return bg
+
+
 def load_images():
-    bg = pg.image.load('res/graphics/fon_03.jpg').convert()
     kolobok_image_god = pg.image.load('res/graphics/Kolobok_god_mode.png').convert_alpha()
-    kolobok_image = pg.image.load('res/graphics/Kolobok01.png').convert_alpha()
+    kolobok_image = pg.image.load('res/graphics/Kolobok_Ivan.png').convert_alpha()
     kolobok_list = []
-    for i in range(31):
+    for i in range(1,32):
         kolobok_ = pg.transform.rotate(kolobok_image, -i * 11.6129)
         kolobok = pg.transform.scale(kolobok_, (50, 50))  # Масштабирование
         kolobok_list.append(kolobok)
+
     kolobok = [pg.transform.scale(kolobok_image_god, (50, 50)), \
                pg.transform.scale(kolobok_image, (50, 50)),\
                kolobok_list]
@@ -27,7 +34,7 @@ def load_images():
     zayac_image = pg.image.load('res/graphics/zayac01.png').convert_alpha()
     zayac = pg.transform.scale(zayac_image, (282, 360))  # Масштабирование
 
-    return bg, kolobok, lisa, medved, zayac
+    return kolobok, lisa, medved, zayac
 
 
 def load_music():
