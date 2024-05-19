@@ -9,8 +9,8 @@ def load_fonts():
 
 def load_background():
     bg = []
-    bg.append(pg.image.load('res/graphics/fon_03.jpg').convert())
-    bg.append(pg.image.load('res/graphics/backfon.jpg').convert())
+    bg.append(pg.image.load('res/graphics/fon_00.jpg').convert())
+    bg.append(pg.image.load('res/graphics/fon_01.jpg').convert())
     return bg
 
 
@@ -28,7 +28,7 @@ def load_images():
                kolobok_list]
     lisa_image = pg.image.load('res/graphics/lisa.png').convert_alpha()
     lisa = pg.transform.scale(lisa_image, (282, 360))  # Масштабирование
-    medved_image = pg.image.load('res/graphics/medved.png').convert_alpha()
+    medved_image = pg.image.load('res/graphics/medved01.png').convert_alpha()
     medved = pg.transform.scale(medved_image, (160, 160))  # Масштабирование
     medved = pg.transform.flip(medved, True, False)  # Отражение по горизонтали
     zayac_image = pg.image.load('res/graphics/zayac01.png').convert_alpha()

@@ -2,7 +2,8 @@
 import pygame as pg
 import time
 import game.resources as res
-from game.input_handler import handle_events
+from game.input_handler import InputHandler
+from game.state_manager import StateManager
 
 
 class GameEngine:
@@ -30,14 +31,16 @@ class GameEngine:
         self.font28, self.font22 = res.load_fonts()
         self.bg = res.load_background()
         self.kolobok, self.lisa, self.medved, self.zayac = res.load_images()
+        self.state_manager = StateManager()
 
     def run(self, screen):
         res.load_music()
         pg.mixer.music.play(loops=-1)
         pg.mixer.music.set_volume(0.125)
+        handler = InputHandler()
         running = True
         while running:
-            running = handle_events()
+            running = handler.handle_events(self.state_manager)
             if running == 'L':
                 running = True
                 self.kolobok_x = self.old_kolobok_x
@@ -62,10 +65,10 @@ class GameEngine:
             self.clock.tick(60)
 
             if self.kolobok_x > screen.get_width():
-                screen.blit(self.bg[1], (0, 0))
-                screen.blit(self.font28.render('Конец игры', True, pg.Color(0, 0, 0)), (540, 267))
-                pg.display.flip()
-                time.sleep(3)
+                # screen.blit(self.bg[1], (0, 0))
+                # screen.blit(self.font28.render('Конец игры', True, pg.Color(0, 0, 0)), (540, 267))
+                # pg.display.flip()
+                # time.sleep(3)
 
                 return 'next_level'
 

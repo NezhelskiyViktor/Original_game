@@ -1,9 +1,9 @@
 import pygame as pg
 import time
-from game.input_handler import handle_events
+from game.input_handler import InputHandler
 
 
-def run_move(screen):
+def run_move(screen, state_manager):
     # Время отображения каждого изображения (в секундах)
     interval = 0.18
     total_time = 28  # Общее время отображения (в секундах)
@@ -19,11 +19,18 @@ def run_move(screen):
 
     # Запуск воспроизведения звука
     pg.mixer.music.play()
+    input_handler = InputHandler()
 
     while (time.time() - start_time) < total_time:
-        if not handle_events():
-            pg.mixer.music.stop()
-            return
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.mixer.music.stop()
+                return
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_SPACE:
+                    pg.mixer.music.stop()
+                    return
+
         # Формируем имя файла текущего кадра
         frame_name = f'move/frame{frame_number:04d}.jpg'
 
