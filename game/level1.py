@@ -1,7 +1,34 @@
 import pygame as pg
 import settings
+import time
 import resources
 import physics as ph
+
+# Переводит милисекунды в удобный формат
+def format_time(milliseconds):
+    # Преобразуем миллисекунды в секунды
+    seconds = milliseconds // 1000
+    # Получаем минуты и секунды
+    minutes = seconds // 60
+    seconds = seconds % 60
+    # Форматируем время в строку MM:SS
+    time_str = f"{minutes:02}:{seconds:02}"
+    return time_str
+
+# Текстовые блоки.
+class TextBox(pg.sprite.Sprite):
+    def __init__(self, text, x, y):
+        pg.sprite.Sprite.__init__(self)
+        self.text = text
+        self.font = pg.font.Font("../res/font/arialbi.ttf", 30)
+        self.image = self.font.render(self.text, False, resources.RED)
+        self.rect = self.image.get_rect()
+        self.rect.centerx = x
+        self.rect.centery = y
+
+    def update(self):
+        self.text = formatted_time
+        self.image = self.font.render(self.text, False, resources.RED)
 
 
 # функция для создания любых, но ОДИНАКОВЫХ платформ
@@ -16,9 +43,11 @@ def create_grass(x, y, length): # вводные данные - стартовы
         platforms.add(grass)
         x += grass.rect.width  # Перемещаем X на ширину спрайта для следующего спрайта
 
-
+# пока задаём текщий уровень жёстко в коде, потом будет считываться из файла
+current_level=1
 
 pg.init()
+start_ticks = pg.time.get_ticks()
 level1 = settings.Settings()
 screen = pg.display.set_mode((level1.screen_width, level1.screen_height))
 pg.display.set_caption(level1.caption)
@@ -49,6 +78,10 @@ kolobok.rect.x = 30
 kolobok.rect.y = level1.screen_height - 50
 all_sprites.add(kolobok)
 
+# Создаю табло времени
+time_box = TextBox("00:00", 1100, 20)
+all_sprites.add(time_box)
+
 # ОСНОВНОЙ ЦИКЛ ИГРЫ
 running = True
 while running:
@@ -58,6 +91,13 @@ while running:
     for event in pg.event.get():
         if event.type == pg.QUIT: running = False
 
+# Считаем прошедшее время с начала игры
+    # Получаем текущее время
+    current_ticks = pg.time.get_ticks()
+    # Вычисляем время работы приложения
+    elapsed_time = current_ticks - start_ticks
+    # Форматируем прошедшее время
+    formatted_time = format_time(elapsed_time)
 
 # Обработка нажатий клавиш
     keys = pg.key.get_pressed()
@@ -72,8 +112,8 @@ while running:
 
     if kolobok.find_nearest_platform(platforms):
         kolobok.current_ground_y = kolobok.find_nearest_platform(platforms)[1]
-        print(f"Координата У платформы под колобком: {kolobok.current_ground_y}")
-
+        #print(f"Координата У платформы под колобком: {kolobok.current_ground_y}")
+    '''
     kolobok.on_platform = kolobok.check_platforms_below(platforms)
     if not kolobok.on_platform:
         # Тут логика падения или "смерти" персонажа
@@ -84,11 +124,11 @@ while running:
         # Тут может быть логика, которая обрабатывает стояние игрока на платформе
         print(f"Координаты колобка: {kolobok.rect.x, kolobok.rect.y}")
         print("Персонаж находится на платформе")
-
+    '''
 
 # Обновление спрайтов
-    all_sprites.update()  # Важно вызвать метод update у всех спрайтов
     platforms.update()
+    all_sprites.update()
 
 # Рендеринг
     all_sprites.draw(screen)

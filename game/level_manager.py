@@ -3,8 +3,21 @@ from ui.components import Player, Obstacle, Enemy
 import game.resources as res
 
 def _create_level(level_index):
+    background = pg.image.load(f"../res/graphics/fon_0{level_index}.jpg")
+    match level_index:
+        case 0:
+            pass
+        case 1:
+            pass
+        case 2:
+            pass
+        case 3:
+            pass
+        case 4:
+            pass
+
     # Создаем фон уровня
-    background = pg.image.load(f"res/graphics/fon_0{level_index}.jpg")
+
 
     # Создаем игрока
     player = Player(level_index)  # Пример начальной позиции
