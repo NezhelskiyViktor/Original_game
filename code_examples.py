@@ -1,60 +1,70 @@
-import pygame
+import pygame as pg
 import sys
 
+# Константы
+WIDTH, HEIGHT = 200, 200
+SLIDER_WIDTH, SLIDER_HEIGHT = 150, 20
+SLIDER_COLOR = (100, 100, 100)
+HANDLE_COLOR = (255, 0, 0)
+BACKGROUND_COLOR = (255, 255, 255)
+HANDLE_WIDTH = 10
+HANDLE_HEIGHT = SLIDER_HEIGHT
+SLIDER_POSITIONS = [(25, 50), (25, 150)]
+
 # Инициализация Pygame
-pygame.init()
+pg.init()
+screen = pg.display.set_mode((WIDTH, HEIGHT))
+pg.display.set_caption("Настройки звука")
 
+# Ползунки
+class Slider:
+    def __init__(self, x, y):
+        self.rect = pg.Rect(x, y, SLIDER_WIDTH, SLIDER_HEIGHT)
+        self.handle_rect = pg.Rect(x, y, HANDLE_WIDTH, HANDLE_HEIGHT)
+        self.value = 0.5  # Начальное значение громкости (50% от ширины ползунка)
+        self.update_handle_position()
 
-def rotate_image(a_image, a_angle):
-    """Поворот изображения, сохраняя его центр."""
-    the_image = pygame.transform.rotate(a_image, a_angle)
-    rect = a_image.get_rect()
-    the_image_rect = the_image.get_rect(center=rect.center)
-    return the_image, the_image_rect
+    def update_handle_position(self):
+        self.handle_rect.x = self.rect.x + int(self.value * (SLIDER_WIDTH - HANDLE_WIDTH))
 
+    def draw(self, screen):
+        pg.draw.rect(screen, SLIDER_COLOR, self.rect)
+        pg.draw.rect(screen, HANDLE_COLOR, self.handle_rect)
 
-FPS = 60
-clock = pygame.time.Clock()
-# Создание окна
-screen_width, screen_height = 1200, 800
-screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("Пример преобразования функциями Pygame")
+    def move_handle(self, direction):
+        step = 0.01
+        if direction == 'left':
+            self.value = max(0, self.value - step)
+        elif direction == 'right':
+            self.value = min(1, self.value + step)
+        self.update_handle_position()
 
-# Загрузка изображения
-image_path = " resources/ graphics/Kolobok_regular.png"  # Укажите путь к вашему файлу
-image = pygame.image.load(image_path)
+# Создание ползунков
+sliders = [Slider(*pos) for pos in SLIDER_POSITIONS]
+active_slider_index = 0
 
-# Трансформации
-scaled_image = pygame.transform.scale(image, (50, 50))  # Масштабирование
-rotated_image = pygame.transform.rotate(image, 30)  # Поворот на 45 градусов
-flipped_image = pygame.transform.flip(image, True, False)  # Отражение по горизонтали
-angle = 0
-
-
-# Основной цикл программы
+# Главный цикл
 running = True
 while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
             running = False
+        elif event.type == pg.KEYDOWN:
+            if event.key == pg.K_ESCAPE:
+                running = False
+            elif event.key == pg.K_TAB:
+                active_slider_index = (active_slider_index + 1) % len(sliders)
+            elif event.key == pg.K_LEFT:
+                sliders[active_slider_index].move_handle('left')
+            elif event.key == pg.K_RIGHT:
+                sliders[active_slider_index].move_handle('right')
 
-    screen.fill((255, 255, 255))  # Заполняем экран белым цветом
+    # Отрисовка
+    screen.fill(BACKGROUND_COLOR)
+    for slider in sliders:
+        slider.draw(screen)
 
-    # Отображение изображений
-    screen.blit(image, (50, 50))
-    screen.blit(scaled_image, (250, 50))
-    screen.blit(rotated_image, (350, 50))
-    screen.blit(flipped_image, (50, 250))
-    new_image, new_rect = rotate_image(scaled_image, angle)
-    new_rect = new_rect.move(650, 50)
-    screen.blit(new_image, new_rect)
+    pg.display.flip()
 
-    pygame.display.flip()  # Обновление экрана
-    angle += 3
-    clock.tick(FPS)
-
-pygame.quit()
+pg.quit()
 sys.exit()
-
-if __name__ == "__main__":
-    main()

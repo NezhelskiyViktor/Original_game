@@ -13,7 +13,7 @@ if __name__ == '__main__':
     # Запуск основного цикла игры
     game = GameEngine()
     message = game.run(screen)
-    print(message)
+
 
     pg.quit()
 
