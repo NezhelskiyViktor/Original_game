@@ -3,29 +3,21 @@ import pygame as pg
 
 class InputHandler:
     def handle_events(self, state_manager):
-        # for event in pg.event.get():
-        #     if event.type == pg.QUIT:
-        #         state_manager.running = False
-        #
         for event in pg.event.get():
             if event.type == pg.QUIT:
-                state_manager.running = False
                 return False
-            if event.type == pg.KEYDOWN:
-                if event.key == pg.K_SPACE:
-                    return False
-
-        keys = pg.key.get_pressed()
-        if keys[pg.K_a]:
-            direction = 'L'
-        elif keys[pg.K_d]:
-            direction = 'R'
-        elif keys[pg.K_w]:
-            direction = 'U'
-        elif keys[pg.K_s]:
-            direction = 'D'
-        else:
-            direction = True
-
-        return direction
+            elif event.type == pg.KEYDOWN:
+                if event.key == pg.K_ESCAPE:
+                    state_manager.state = 'game'
+                elif event.key == pg.K_F1:
+                    state_manager.state = 'menu'
+                elif event.key in (pg.K_w, pg.K_UP):
+                    return 'U'
+                elif event.key in (pg.K_s, pg.K_DOWN):
+                    return 'D'
+                elif event.key in (pg.K_a, pg.K_LEFT):
+                    return 'L'
+                elif event.key in (pg.K_d, pg.K_RIGHT):
+                    return 'R'
+        return True
 

@@ -4,7 +4,8 @@ import pygame as pg
 def load_fonts():
     font28 = pg.font.Font('res/font/arialbi.ttf', 28)
     font22 = pg.font.Font('res/font/arialbi.ttf', 22)
-    return font28, font22
+    font18 = pg.font.Font('res/font/arialbi.ttf', 18)
+    return font28, font22, font18
 
 
 def load_background():
