@@ -6,6 +6,7 @@ from game.state_manager import StateManager
 import volume_settings as vs
 import mini_menu as mini
 
+
 class GameEngine:
     kolobok_height = 50
     old_kolobok_x = 260
@@ -25,6 +26,10 @@ class GameEngine:
     y_speed = -1
     falling = False
     time_elapsed = 0
+    music = [True, False]
+    music_index = 0
+    music_volume = [0.125, 0.25, 0.5, 1.0]
+    m_v_index = 0
 
     def __init__(self):
         self.clock = pg.time.Clock()
@@ -35,8 +40,9 @@ class GameEngine:
 
     def run(self, screen):
         res.load_music()
-        pg.mixer.music.play(loops=-1)
-        pg.mixer.music.set_volume(0.125)
+        if self.music[self.music_index]:
+            pg.mixer.music.play(loops=-1)
+            pg.mixer.music.set_volume(self.music_volume[self.m_v_index])
         handler = InputHandler()
         running = True
         while running:
@@ -103,9 +109,14 @@ class GameEngine:
         screen.blit(self.zayac, (950, 400))
 
     def go_menu(self, screen):
-        diff_level, live_count, game_state = 2, 2, 1
+        diff_index, live_index, game_index, sound_index,  s_v_d_index = 2, 2, 1, 1, 2
         mini_menu = mini.MiniMenu(screen, 800, 5)
-        diff_level, live_count, game_state = mini_menu.run(diff_level, live_count, game_state)
+        diff_index, live_index, game_index, sound_index, self.music_index, s_v_d_index, self.m_v_index = mini_menu.run(
+            diff_index, live_index, game_index, sound_index, self.music_index, s_v_d_index, self.m_v_index)
         self.state_manager.state = 'game'
+        pg.mixer.music.stop()
+        if self.music[self.music_index]:
+            pg.mixer.music.play(loops=-1)
+            pg.mixer.music.set_volume(self.music_volume[self.m_v_index])
 
-        print(diff_level, live_count, game_state)
+        print(diff_index, live_index, game_index, sound_index, self.music_index, s_v_d_index, self.m_v_index)

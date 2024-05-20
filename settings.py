@@ -7,4 +7,6 @@ class Settings:
         self.fps = 60
         self.music_volume = 0.125
         self.sound_volume = 0.125
+        self.sound = True
+        self.music = True
         self.show_move = False
