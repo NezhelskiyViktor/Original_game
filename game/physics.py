@@ -3,12 +3,13 @@ import pygame as pg
 
 
 class Char(pg.sprite.Sprite):
-    def __init__(self, health, speed, image):
+    def __init__(self, health, speed, image, current_ground_y):
         pg.sprite.Sprite.__init__(self)
         self.health = health
         self.h_speed = speed
         self.v_speed = 0
         self.on_ground = True
+        self.current_ground_y = current_ground_y
         self.image = pg.image.load(image)
         self.rect = self.image.get_rect()
         self.gravity = 0.5
@@ -38,8 +39,8 @@ class Char(pg.sprite.Sprite):
 
 # КОСТЫЛЬ!!!!!! надо потом сделать универсальную передачу констант, ведь уровни будут разные
 # сейчас проверяю только находждение на полу
-        if self.rect.bottom > 720-50: # тут надо понять, как поймать координату Х поверхности, над которой он находится
-            self.rect.bottom = 720-50
+        if self.rect.bottom > self.current_ground_y:
+            self.rect.bottom = self.current_ground_y
             self.on_ground = True
             self.v_speed = 0
 
@@ -47,16 +48,26 @@ class Char(pg.sprite.Sprite):
         self.v_speed += self.gravity
         self.rect.y += self.v_speed
 
-        if self.rect.bottom > 720 - self.rect.height:
-            self.rect.bottom = 720 - self.rect.height
+        if self.rect.bottom > self.current_ground_y: #- self.rect.height:
+            self.rect.bottom = self.current_ground_y #- self.rect.height
             self.on_ground = True
             self.velocity = 0
 
-'''
-# Обработка нажатий клавиш. Здесь именно факт зажатия и удерживания, если нужно непрерывное движение
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT]:
-        if player.rect.x > 0: player.rect.x -= 10
-    if keys[pygame.K_RIGHT]:
-        if player.rect.right < monster.rect.left + 25: player.rect.x += 10
-'''
+    def find_nearest_platform(self, platforms):
+        closest_platform = None
+        closest_distance = float('inf')  # Установим очень большое начальное значение
+
+        for platform in platforms:
+            # Платформа должна быть ниже персонажа...
+            if platform.rect.top >= self.rect.bottom:
+                # ...и пересекаться с персонажем по оси X
+                if platform.rect.right >= self.rect.left and platform.rect.left <= self.rect.right:
+                    distance = platform.rect.top - self.rect.bottom
+                    if distance < closest_distance:
+                        closest_distance = distance
+                        closest_platform = platform
+
+        if closest_platform is not None:
+            return closest_platform.rect.topleft  # Вернем координаты верхнего левого угла платформы
+        else:
+            return None  # Если подходящих платформ нет, возвращаем None

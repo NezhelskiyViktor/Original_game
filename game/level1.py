@@ -14,7 +14,6 @@ def create_grass(x, y, length): # вводные данные - стартовы
         grass.rect.y = y - grass.rect.height  # Позиционируем у нижнего края окна
         grass.rect.x = x
         platforms.add(grass)
-        print(platforms)
         x += grass.rect.width  # Перемещаем X на ширину спрайта для следующего спрайта
 
 
@@ -40,12 +39,14 @@ all_sprites.add(bg)
 # создаю землю и платформы
 create_grass(0, level1.screen_height,level1.screen_width) # ЗЕМЛЯ
 create_grass(200, 620, 300) # ПЛАТФОРМА 1
-create_grass(600, 350, 200) # ПЛАТФОРМА 2
+create_grass(500, 520, 200) # ПЛАТФОРМА 2
+create_grass(350, 420, 100) # ПЛАТФОРМА 3
+create_grass(500, 320, 400) # ПЛАТФОРМА 4
 
 # создаю колобка
-kolobok = ph.Char(5, 3, '../res/graphics/kolobok_50x50_right.png')
+kolobok = ph.Char(5, 3, '../res/graphics/kolobok_50x50_right.png', 670)
 kolobok.rect.x = 30
-kolobok.rect.y = 720 - 100 #level1.screen_height - 50
+kolobok.rect.y = level1.screen_height - 50
 all_sprites.add(kolobok)
 
 # ОСНОВНОЙ ЦИКЛ ИГРЫ
@@ -69,15 +70,19 @@ while running:
     if keys[pg.K_SPACE]:
         kolobok.jump()
 
+    if kolobok.find_nearest_platform(platforms):
+        kolobok.current_ground_y = kolobok.find_nearest_platform(platforms)[1]
+        print(f"Координата У платформы под колобком: {kolobok.current_ground_y}")
+
     kolobok.on_platform = kolobok.check_platforms_below(platforms)
     if not kolobok.on_platform:
         # Тут логика падения или "смерти" персонажа
-        print(kolobok.rect.x, kolobok.rect.y)
-        print("Персонаж должен падать или умереть")
-        #pg.quit()
+        print(f"Координаты колобка: {kolobok.rect.x, kolobok.rect.y}")
+        print("Персонаж должен падать")
+
     else:
         # Тут может быть логика, которая обрабатывает стояние игрока на платформе
-        print(kolobok.rect.x, kolobok.rect.y)
+        print(f"Координаты колобка: {kolobok.rect.x, kolobok.rect.y}")
         print("Персонаж находится на платформе")
 
 
@@ -86,7 +91,6 @@ while running:
     platforms.update()
 
 # Рендеринг
-
     all_sprites.draw(screen)
     platforms.draw(screen)
 
