@@ -13,26 +13,9 @@ class Char(pg.sprite.Sprite):
         self.image = pg.image.load(image)
         self.rect = self.image.get_rect()
         self.gravity = 0.5
-        self.jump_strength = -11
+        self.jump_strength = -13
 
-    '''
-    #определяем, есть под ним что-то, или надо упасть. Впоследствии оказалось ненужным
-    def check_platforms_below(self, platforms):
-        # Сдвигаем rect игрока вниз на 1 пиксель для проверки столкновения с платформами
-        self.rect.y += 1
-        for platform in platforms:
-            # Проверяем столкновение игрока с платформой
-            if self.rect.colliderect(platform.rect):
-                # Если нашли столкновение с перемещением вниз,
-                # значит, под игроком есть платформа, и он не должен падать
-                self.rect.y -= 1  # Отменяем перемещение rect игрока
-                return True
 
-        # Если перебрали все платформы и не нашли столкновений,
-        # возвращаем игрока на его первоначальную позицию и сообщаем, что он должен падать
-        self.rect.y -= 1
-        return False
-    '''
     def jump(self):
         if self.on_ground:
             self.v_speed = self.jump_strength

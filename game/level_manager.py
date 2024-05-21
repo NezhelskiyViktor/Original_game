@@ -2,8 +2,9 @@ import pygame as pg
 from ui.components import Player, Obstacle, Enemy
 import game.resources as res
 
-def _create_level(level_index):
+def create_level(level_index):
     background = pg.image.load(f"../res/graphics/fon_0{level_index}.jpg")
+    grass = pg.image.load(f"../res/graphics/grass_0{level_index}.png")
     match level_index:
         case 0:
             pass
@@ -16,17 +17,21 @@ def _create_level(level_index):
         case 4:
             pass
 
-    # Создаем фон уровня
-
+def create_grass(x, y, length):  # вводные данные - стартовые координаты (х,у) и длина
+    platform_end = x + length
+    while x < platform_end:
+        grass = pg.sprite.Sprite()
+        grass.image = pg.image.load('../res/graphics/grass2.png')
+        grass.rect = grass.image.get_rect()
+        grass.rect.y = y - grass.rect.height  # Позиционируем у нижнего края окна
+        grass.rect.x = x
+        mainEngine.platforms.add(grass)
+        x += grass.rect.width  # Перемещаем X на ширину спрайта для следующего спрайта
 
     # Создаем игрока
     player = Player(level_index)  # Пример начальной позиции
 
-    # Создаем препятствия
-    obstacles = [
-        # Obstacle(position=(200, 300), size=(50, 50)),
-        # Obstacle(position=(400, 300), size=(50, 50))
-    ]
+
 
     # Создаем врагов
     if level_index == 0:

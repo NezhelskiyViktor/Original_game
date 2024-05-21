@@ -1,6 +1,5 @@
 import pygame as pg
 import settings
-import time
 import resources
 import physics as ph
 
@@ -36,7 +35,7 @@ def create_grass(x, y, length): # вводные данные - стартовы
     platform_end = x+length
     while x < platform_end:
         grass = pg.sprite.Sprite()
-        grass.image = pg.image.load('../res/graphics/grass2.png')
+        grass.image = pg.image.load('../res/graphics/grass01.png')
         grass.rect = grass.image.get_rect()
         grass.rect.y = y - grass.rect.height  # Позиционируем у нижнего края окна
         grass.rect.x = x
@@ -59,11 +58,12 @@ platforms = pg.sprite.Group() # платформы - отдельно для п�
 
 # создаю фон
 bg = pg.sprite.Sprite()
-bg.image = pg.image.load('../res/graphics/fon_03.jpg')
+bg.image = pg.image.load('../res/graphics/fon_03-2.jpg')
 bg.rect = bg.image.get_rect()
 bg.rect.y = 0
 bg.rect.x = 0
-all_sprites.add(bg)
+screen.blit(bg.image, (0, 0))
+#all_sprites.add(bg)
 
 # создаю землю и платформы
 create_grass(0, level1.screen_height,level1.screen_width) # ЗЕМЛЯ
@@ -75,7 +75,7 @@ create_grass(500, 320, 400) # ПЛАТФОРМА 4
 # создаю колобка
 kolobok = ph.Char(5, 3, '../res/graphics/kolobok_50x50_right.png', 670)
 kolobok.rect.x = 30
-kolobok.rect.y = level1.screen_height - 50
+kolobok.rect.y = level1.screen_height - 30
 all_sprites.add(kolobok)
 
 # Создаю табло времени
@@ -110,29 +110,25 @@ while running:
     if keys[pg.K_SPACE]:
         kolobok.jump()
 
+
     if kolobok.find_nearest_platform(platforms):
         kolobok.current_ground_y = kolobok.find_nearest_platform(platforms)[1]
-        #print(f"Координата У платформы под колобком: {kolobok.current_ground_y}")
-    '''
-    kolobok.on_platform = kolobok.check_platforms_below(platforms)
-    if not kolobok.on_platform:
-        # Тут логика падения или "смерти" персонажа
-        print(f"Координаты колобка: {kolobok.rect.x, kolobok.rect.y}")
-        print("Персонаж должен падать")
 
-    else:
-        # Тут может быть логика, которая обрабатывает стояние игрока на платформе
-        print(f"Координаты колобка: {kolobok.rect.x, kolobok.rect.y}")
-        print("Персонаж находится на платформе")
-    '''
+# Проверка столкновения
+#     if pg.sprite.spritecollide(kolobok, platforms, False):
+#         kolobok.rect.y = kolobok.current_ground_y
+#         kolobok.v_speed = 0
+#         kolobok.on_ground = True
+
 
 # Обновление спрайтов
     platforms.update()
     all_sprites.update()
 
 # Рендеринг
-    all_sprites.draw(screen)
+    screen.blit(bg.image, (0, 0))
     platforms.draw(screen)
+    all_sprites.draw(screen)
 
 # После отрисовки всего, переворачиваем экран
     pg.display.flip()
