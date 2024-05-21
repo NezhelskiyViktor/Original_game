@@ -28,8 +28,8 @@ class GameEngine:
 
     def __init__(self, settings):
         self.clock = pg.time.Clock()
-        self.font28, self.font22, self.font18 = res.load_fonts()
-        self.bg = res.load_background()
+        _, self.font28, _, self.font18 = res.load_fonts()
+        self.bg = res.load_background()[0]
         self.kolobok, self.lisa, self.medved, self.zayac = res.load_images()
         self.state_manager = StateManager()
         self.settings = settings
@@ -78,7 +78,6 @@ class GameEngine:
 
                 self.update()
                 self.render(screen)
-                pg.display.flip()
                 self.clock.tick(60)
 
                 if self.kolobok_x > screen.get_width():
@@ -103,7 +102,7 @@ class GameEngine:
             self.kolobok_x += self.x_speed
 
     def render(self, screen):
-        screen.blit(self.bg[0], (0, 0))
+        screen.blit(self.bg, (0, 0))
         screen.blit(self.medved, (730, 460))
         if not self.kolobok_running:
             t = int(time.time() * 10 % 4)
@@ -116,6 +115,8 @@ class GameEngine:
             screen.blit(self.kolobok[2][(self.kolobok_x // 5) % 31], (int(self.kolobok_x), int(self.kolobok_y)))
         screen.blit(self.lisa, (10, 360))
         screen.blit(self.zayac, (950, 400))
+
+        pg.display.flip()
 
     def go_menu(self, screen):
         installations = (

@@ -29,7 +29,7 @@ class MiniMenu:
         self.width = 300
         self.height = 190
         self.subsurface = screen.subsurface((x, y, self.width, self.height))  # Создание мини-окна
-        _, _, self.font18 = res.load_fonts()
+        _, _, _, self.font18 = res.load_fonts()
 
     def draw_text(self, text, font, color, surface, x, y):
         textobj = font.render(text, 1, color)

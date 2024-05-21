@@ -2,16 +2,19 @@ import pygame as pg
 
 
 def load_fonts():
+    font30 = pg.font.Font('res/font/arialbi.ttf', 30)
     font28 = pg.font.Font('res/font/arialbi.ttf', 28)
     font22 = pg.font.Font('res/font/arialbi.ttf', 22)
     font18 = pg.font.Font('res/font/arialbi.ttf', 18)
-    return font28, font22, font18
+    return font30, font28, font22, font18
 
 
 def load_background():
-    bg = []
-    bg.append(pg.image.load('res/graphics/fon_00.jpg').convert())
-    bg.append(pg.image.load('res/graphics/fon_01.jpg').convert())
+    bg = [
+    pg.image.load('res/graphics/fon_00.jpg').convert(),  # 0
+    pg.image.load('res/graphics/fon_01.jpg').convert(),  # 1
+    pg.image.load('res/graphics/fon_03-2.jpg').convert()  # 2
+    ]
     return bg
 
 
@@ -50,3 +53,11 @@ def load_sound():
         'res/sounds/teases01.wav'
     ]
     return sound
+
+# Задаем цвета
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+GREY =(200, 200, 200)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
