@@ -19,13 +19,13 @@ def load_images():
     kolobok_image_god = pg.image.load('res/graphics/Kolobok_god_mode.png').convert_alpha()
     kolobok_image = pg.image.load('res/graphics/Kolobok_Ivan.png').convert_alpha()
     kolobok_list = []
-    for i in range(1,32):
+    for i in range(1, 32):
         kolobok_ = pg.transform.rotate(kolobok_image, -i * 11.6129)
         kolobok = pg.transform.scale(kolobok_, (50, 50))  # Масштабирование
         kolobok_list.append(kolobok)
 
     kolobok = [pg.transform.scale(kolobok_image_god, (50, 50)), \
-               pg.transform.scale(kolobok_image, (50, 50)),\
+               pg.transform.scale(kolobok_image, (50, 50)), \
                kolobok_list]
     lisa_image = pg.image.load('res/graphics/lisa.png').convert_alpha()
     lisa = pg.transform.scale(lisa_image, (282, 360))  # Масштабирование
@@ -40,3 +40,10 @@ def load_images():
 
 def load_music():
     pg.mixer.music.load('res/sounds/music_fon_01.mp3')
+
+
+def load_sound():
+    sound = [
+    pg.mixer.Sound(f'res/sounds/teases01.wav')
+    ]
+    return sound

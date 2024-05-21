@@ -15,7 +15,7 @@ if __name__ == '__main__':
         move.run_move(screen)
 
     # Запуск основного цикла игры
-    game = GameEngine()
+    game = GameEngine(settings)
     message = game.run(screen)
 
 
