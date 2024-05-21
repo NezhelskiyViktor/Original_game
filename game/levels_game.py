@@ -33,10 +33,12 @@ class Levels_game:
     current_level = 1
     elapsed_time = 0
 
-    def __init__(self, settings):
+    def __init__(self, settings, lives, score):
         self.start_ticks = pg.time.get_ticks()
         self.setting = settings
         self.clock = pg.time.Clock()
+        self.lives = lives
+        self.score = score
 
         self.font, _, _, _ = res.load_fonts()
 
@@ -61,6 +63,18 @@ class Levels_game:
         self.kolobok.rect.y = self.setting.screen_height - 30
         self.all_sprites.add(self.kolobok)
         self.kolobok.image = pg.image.load('res/graphics/kolobok_50x50_left.png')
+
+        # Количество жизней показываем сердечками
+        self.heart = pg.sprite.Group()
+        for i in range(self.lives):   #  Количество жизней
+            heart = pg.sprite.Sprite()
+            heart.image = pg.transform.scale(pg.image.load('res/graphics/heart.png') , (30, 30))   # Масштабирование
+            heart.rect = heart.image.get_rect()
+            heart.rect.x = 10 + i * heart.rect.width
+            heart.rect.y = 10
+            self.heart.add(heart)
+            self.all_sprites.add(heart)
+
 
     def run_game(self, screen):
         # ОСНОВНОЙ ЦИКЛ ИГРЫ
