@@ -37,6 +37,7 @@ class GameEngine:
         self.sound_volume = self.settings.sound_volume
         self.music = self.settings.music
         self.music_volume = self.settings.music_volume
+        self.show_move = self.settings.show_move
 
     def run(self, screen):
         sound1 = pg.mixer.Sound(res.load_sound()[0])
@@ -125,7 +126,8 @@ class GameEngine:
             self.settings.sound,
             self.settings.music,
             self.settings.sound_volume,
-            self.settings.music_volume
+            self.settings.music_volume,
+            self.settings.show_move
         )
 #        print("До: ", installations)
 
@@ -138,7 +140,9 @@ class GameEngine:
          self.settings.sound,
          self.settings.music,
          self.settings.sound_volume,
-         self.settings.music_volume) = installations
+         self.settings.music_volume,
+         self.settings.show_move
+         ) = installations
 #        print("После: ", installations)
 
         pg.mixer.music.stop()

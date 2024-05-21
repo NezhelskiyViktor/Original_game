@@ -9,6 +9,7 @@ class MiniMenu:
     music = ["выкл", "вкл"]
     sound_volume = [0.125, 0.25, 0.5, 1.0]
     music_volume = [0.125, 0.25, 0.5, 1.0]
+    show_move = ["выкл", "вкл"]
     game_states = ["новая", "сохраненная"]
 
     # Изначальные значения
@@ -17,7 +18,9 @@ class MiniMenu:
     music_index = 0
     s_v_index = 0
     m_v_index = 0
+    show_move_index = 0
     game_state_index = 0
+
 
     # Индекс активного элемента (0 - сложность, 1 - звук, 2 - музыка и т.д.)
     active_index = 0
@@ -27,7 +30,7 @@ class MiniMenu:
         self.x = x
         self.y = y
         self.width = 300
-        self.height = 190
+        self.height = 210
         self.subsurface = screen.subsurface((x, y, self.width, self.height))  # Создание мини-окна
         _, _, _, self.font18 = res.load_fonts()
 
@@ -38,12 +41,13 @@ class MiniMenu:
         surface.blit(textobj, textrect)
 
     def run(self, installations):
-        diffi_level, game_state, sound, music, sound_volume, music_volume = installations
+        diffi_level, game_state, sound, music, sound_volume, music_volume, show_move = installations
         self.difficulty_index = diffi_level
         self.sound_index = 1 if sound else 0
         self.music_index = 1 if music else 0
         self.s_v_index = self.sound_volume.index(sound_volume)
         self.m_v_index = self.music_volume.index(music_volume)
+        self.show_move_index = 1 if show_move else 0
         self.game_state_index = game_state
 
         running = True
@@ -71,6 +75,8 @@ class MiniMenu:
                         elif self.active_index == 4:
                             self.m_v_index = (self.m_v_index + 1) % len(self.music_volume)
                         elif self.active_index == 5:
+                            self.show_move_index = (self.show_move_index + 1) % len(self.show_move)
+                        elif self.active_index == 6:
                             self.game_state_index = (self.game_state_index + 1) % len(self.game_states)
 
                     elif event.key == pg.K_LEFT:
@@ -85,6 +91,8 @@ class MiniMenu:
                         elif self.active_index == 4:
                             self.m_v_index = (self.m_v_index - 1) % len(self.music_volume)
                         elif self.active_index == 5:
+                            self.show_move_index = (self.show_move_index - 1) % len(self.show_move)
+                        elif self.active_index == 6:
                             self.game_state_index = (self.game_state_index - 1) % len(self.game_states)
 
             self.draw()
@@ -93,7 +101,7 @@ class MiniMenu:
 
         return (self.difficulty_index, self.game_state_index,
                 self.sound_index, self.music_index, self.sound_volume[self.s_v_index],
-                self.music_volume[self.m_v_index])
+                self.music_volume[self.m_v_index], self.show_move_index)
 
     def draw(self):
         yellow = (250, 250, 0)
@@ -108,7 +116,8 @@ class MiniMenu:
         self.draw_text('Музыка', self.font18, red, self.subsurface, 10, 65)
         self.draw_text('Громкость звуков', self.font18, red, self.subsurface, 10, 95)
         self.draw_text('Громкость музыки', self.font18, red, self.subsurface, 10, 125)
-        self.draw_text('Игра', self.font18, red, self.subsurface, 10, 155)
+        self.draw_text('Показывать видео', self.font18, red, self.subsurface, 10, 155)
+        self.draw_text('Игра', self.font18, red, self.subsurface, 10, 185)
 
         # Отрисовка изменяемых текстов
         self.draw_text(str(self.difficulty_levels[self.difficulty_index]), self.font18,
@@ -121,5 +130,7 @@ class MiniMenu:
                        yellow if self.active_index == 3 else red, self.subsurface, 200, 95)
         self.draw_text(str(self.music_volume[self.m_v_index]), self.font18,
                        yellow if self.active_index == 4 else red, self.subsurface, 200, 125)
-        self.draw_text(self.game_states[self.game_state_index], self.font18,
+        self.draw_text(self.show_move[self.show_move_index], self.font18,
                        yellow if self.active_index == 5 else red, self.subsurface, 120, 155)
+        self.draw_text(self.game_states[self.game_state_index], self.font18,
+                       yellow if self.active_index == 6 else red, self.subsurface, 120, 185)
