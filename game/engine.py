@@ -39,12 +39,12 @@ class GameEngine:
         self.music_volume = self.settings.music_volume
 
     def run(self, screen):
-        res.load_music()
-        sound1 = res.load_sound()[0]
-        sound1.set_volume(self.sound_volume)
+        sound1 = pg.mixer.Sound(res.load_sound()[0])
+        music1 = res.load_music()[0]
         use_sound = True
 
         if self.music:
+            pg.mixer.music.load(music1)
             pg.mixer.music.play(loops=-1)
             pg.mixer.music.set_volume(self.music_volume)
         handler = InputHandler()
@@ -72,6 +72,7 @@ class GameEngine:
                     self.kolobok_running = True
                     self.x_speed = self.new_x_speed
                     if use_sound and self.sound:
+                        sound1.set_volume(self.sound_volume)
                         sound1.play()
                         use_sound = False
 

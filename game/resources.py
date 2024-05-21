@@ -39,11 +39,14 @@ def load_images():
 
 
 def load_music():
-    pg.mixer.music.load('res/sounds/music_fon_01.mp3')
+    music = [
+        'res/sounds/music_fon_01.mp3'
+    ]
+    return music
 
 
 def load_sound():
     sound = [
-    pg.mixer.Sound(f'res/sounds/teases01.wav')
+        'res/sounds/teases01.wav'
     ]
     return sound
