@@ -131,6 +131,6 @@ class MiniMenu:
         self.draw_text(str(self.music_volume[self.m_v_index]), self.font18,
                        yellow if self.active_index == 4 else red, self.subsurface, 200, 125)
         self.draw_text(self.show_move[self.show_move_index], self.font18,
-                       yellow if self.active_index == 5 else red, self.subsurface, 120, 155)
+                       yellow if self.active_index == 5 else red, self.subsurface, 220, 155)
         self.draw_text(self.game_states[self.game_state_index], self.font18,
                        yellow if self.active_index == 6 else red, self.subsurface, 120, 185)
