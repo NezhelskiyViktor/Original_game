@@ -31,6 +31,7 @@ if __name__ == '__main__':
     # Запуск основного цикла игры
     level = Levels_game(settings, lives=4, score=10)
     formated_time, elapsed_time = level.run_game(screen)
+    #level.run_game(screen)
     # Завершение работы
     print("Время игры:", formated_time, "Милисекунд:", elapsed_time)
 

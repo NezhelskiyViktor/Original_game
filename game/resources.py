@@ -13,7 +13,7 @@ def load_background():
     bg = [
     pg.image.load('res/graphics/fon_00.jpg').convert(),  # 0
     pg.image.load('res/graphics/fon_01.jpg').convert(),  # 1
-    pg.image.load('res/graphics/fon_03-2.jpg').convert()  # 2
+    pg.image.load('res/graphics/fon_03.jpg').convert()  # 2
     ]
     return bg
 
