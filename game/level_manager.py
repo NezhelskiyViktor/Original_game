@@ -15,7 +15,7 @@ class Level():
 
     def create_level(self):
     # создание фона
-        self.bg.image = pg.image.load(f"../res/graphics/fon_0{self.index}.jpg")
+        self.bg.image = pg.image.load(f"res/graphics/fon_0{self.index}.jpg")
         self.bg.rect = self.bg.image.get_rect()
         self.bg.rect.y = 0
         self.bg.rect.x = 0
@@ -30,7 +30,7 @@ class Level():
         platform_end = x + length
         while x < platform_end:
             grass = pg.sprite.Sprite()
-            grass.image = pg.image.load(f"../res/graphics/grass_0{self.index}.png")
+            grass.image = pg.image.load(f"res/graphics/grass_0{self.index}.png")
             grass.rect = grass.image.get_rect()
             grass.rect.y = y - grass.rect.height  # Позиционируем у нижнего края окна
             grass.rect.x = x
@@ -58,7 +58,7 @@ class TextBox(pg.sprite.Sprite):
     def __init__(self, text, x, y):
         pg.sprite.Sprite.__init__(self)
         self.text = text
-        self.font = pg.font.Font("../res/font/arialbi.ttf", 30)
+        self.font = pg.font.Font("res/font/arialbi.ttf", 30)
         self.image = self.font.render(self.text, False, res.RED)
         self.rect = self.image.get_rect()
         self.rect.centerx = x
@@ -87,10 +87,11 @@ LEVEL1_PLATFORMS =[
     [0, 720, 1200],
     [200, 620, 300],
     [600, 520, 200],
-    [430, 420, 50],
+    [450, 440, 50],
     [0, 320, 400],
-    [500, 200, 200],
-    [800, 300, 200]
+    [500, 220, 200],
+    [800, 300, 200],
+    [1100, 400, 100]
 ]
 
 LEVEL1_ENEMIES = []
@@ -104,8 +105,8 @@ LEVEL2_PLATFORMS =[
     [0, 720, 1200],
     [200, 620, 300],
     [700, 520, 200],
-    [450, 420, 100],
-    [500, 320, 400]
+    [470, 430, 100],
+    [500, 360, 400]
 ]
 
 LEVEL2_ENEMIES = []

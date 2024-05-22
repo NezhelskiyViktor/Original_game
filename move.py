@@ -3,7 +3,7 @@ import time
 from game.input_handler import InputHandler
 
 
-def run_move(screen, state_manager):
+def run_move(screen):
     # Время отображения каждого изображения (в секундах)
     interval = 0.18
     total_time = 28  # Общее время отображения (в секундах)

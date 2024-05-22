@@ -13,7 +13,7 @@ class Char(pg.sprite.Sprite):
         self.image = pg.image.load(image)
         self.rect = self.image.get_rect()
         self.gravity = 0.5
-        self.jump_strength = -13
+        self.jump_strength = -12
 
 
     def jump(self):
