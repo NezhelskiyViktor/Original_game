@@ -4,13 +4,7 @@ import physics as ph
 import level_manager as lm
 
 
-# Переводит милисекунды в удобный формат
-
-
-
-
-
-# class Level (index, platforms, enemies, obstacles, bonuses)
+# Создаём текущий уровень Level (index, platforms, enemies, obstacles, bonuses)
 current_level = lm.Level(1, lm.LEVEL1_PLATFORMS, lm.LEVEL1_ENEMIES, lm.LEVEL1_OBSTACLES, lm.LEVEL1_BONUSES)
 
 pg.init()
