@@ -1,5 +1,6 @@
 import pygame as pg
 import game.resources as res
+import game.physics as ph
 
 class Level():
     def __init__(self, index, platforms, enemies, obstacles, bonuses):
@@ -26,17 +27,27 @@ class Level():
 
 
     def create_grass(self,x, y, length):  # вводные данные - стартовые координаты (х,у) и длина
-
         platform_end = x + length
         while x < platform_end:
             grass = pg.sprite.Sprite()
             grass.image = pg.image.load(f"res/graphics/grass_0{self.index}.png")
             grass.rect = grass.image.get_rect()
-            grass.rect.y = y - grass.rect.height  # Позиционируем у нижнего края окна
+            grass.rect.y = y  # Позиционируем у нижнего края окна
             grass.rect.x = x
             self.platforms.add(grass)
-            self.all_sprites.add(grass)
             x += grass.rect.width  # Перемещаем X на ширину спрайта для следующего спрайта
+
+
+    def create_enemies(self, enemies):
+        self.enemies = {}  # Создаем пустой словарь для хранения врагов
+
+        for index, enemy_data in enumerate(enemies): # Проходим по списку врагов, вытаскиваем индекс и характеристики
+            enemy_id = f'enemy{index}'  # Создаем уникальный идентификатор для каждого врага
+            self.enemies[enemy_id] = ph.Char(enemy_data[0], enemy_data[1], enemy_data[2], enemy_data[4], True) # Создаем экземпляр класса Char с использованием данных из enemy_data
+            # Хитбокс отличается от размеров картинки (-10 px снизу), чтобы персонаж ходил, чуть погружаясь в траву
+            self.enemies[enemy_id].rect = pg.Rect(enemy_data[3], enemy_data[4]-self.enemies[enemy_id].image.get_height(), self.enemies[enemy_id].image.get_width(), self.enemies[enemy_id].image.get_height()-10)
+            self.all_sprites.add(self.enemies[enemy_id])
+            #self.enemies[enemy_id].autorun()
 
     def update(self):        # Обновление спрайтов
         self.bg_group.update()
@@ -82,33 +93,53 @@ class TextBox(pg.sprite.Sprite):
 
 
 
-
+# Платформы. Нулевая - всегда земля. [Х, Y, длина в рх (по факту будет кратна спрайту)]
 LEVEL1_PLATFORMS =[
-    [0, 720, 1200],
-    [200, 620, 300],
-    [600, 520, 200],
-    [450, 440, 50],
-    [0, 320, 400],
-    [500, 220, 200],
-    [800, 300, 200],
-    [1100, 400, 100]
+    [0, 670, 1200],
+    [200, 570, 300],
+    [600, 470, 200],
+    [450, 380, 50],
+    [0, 270, 400],
+    [500, 170, 200],
+    [800, 250, 200],
+    [1100, 350, 100],
+    [1000, 570, 200],
 ]
 
-LEVEL1_ENEMIES = []
-LEVEL1_OBSTACLES = []
-LEVEL1_BONUSES = []
+# Враги [здоровье, скорость, фото, x (платформы, на которой оно стоит), y (верх платформы)]
+LEVEL1_ENEMIES = [
+    [1, 3, 'res/graphics/lisa100x165_right.png', 100, 270],
+    [1, 1, 'res/graphics/lisa100x165_right.png', 650, 470],
+    [1, 2, 'res/graphics/lisa100x165_right.png', 800, 670]
+]
+
+LEVEL1_OBSTACLES = [
+
+]
+
+LEVEL1_BONUSES = [
+
+]
 
 
 
 
 LEVEL2_PLATFORMS =[
-    [0, 720, 1200],
+    [0, 670, 1200],
     [200, 620, 300],
     [700, 520, 200],
     [470, 430, 100],
     [500, 360, 400]
 ]
 
-LEVEL2_ENEMIES = []
-LEVEL2_OBSTACLES = []
-LEVEL2_BONUSES = []
+LEVEL2_ENEMIES = [
+
+]
+
+LEVEL2_OBSTACLES = [
+
+]
+
+LEVEL2_BONUSES = [
+
+]

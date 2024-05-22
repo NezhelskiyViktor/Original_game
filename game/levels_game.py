@@ -1,5 +1,6 @@
 import pygame as pg
 import game.physics as ph
+from game.physics import Char
 import game.resources as res
 import game.level_manager as lm
 
@@ -8,7 +9,7 @@ import game.level_manager as lm
 class Levels_game:
     # пока задаём текщий уровень жёстко в коде, потом будет считываться из файла
 
-    elapsed_time = 0
+    #elapsed_time = 0
 
     def __init__(self, settings, lives, score):
         self.start_ticks = pg.time.get_ticks()
@@ -24,11 +25,13 @@ class Levels_game:
         self.kolobok.rect = pg.Rect(30, settings.screen_height - 30, 50, 40)
         self.current_level.all_sprites.add(self.kolobok)
 
+        self.current_level.create_enemies(lm.LEVEL1_ENEMIES)
+
         # Количество жизней показываем сердечками
         self.heart = pg.sprite.Group()
         for i in range(self.lives):   #  Количество жизней
             heart = pg.sprite.Sprite()
-            heart.image = pg.transform.scale(pg.image.load('res/graphics/heart.png') , (30, 30))   # Масштабирование
+            heart.image = pg.transform.scale(pg.image.load('res/graphics/heart.png'), (30, 30))   # Масштабирование
             heart.rect = heart.image.get_rect()
             heart.rect.x = 10 + i * heart.rect.width
             heart.rect.y = 10
@@ -41,9 +44,9 @@ class Levels_game:
         #pg.init()
         #screen = pg.display.set_mode((self.setting.screen_width, self.setting.screen_height))
         self.current_level.create_level()
-        start_ticks = pg.time.get_ticks()
+        #start_ticks = pg.time.get_ticks()
         #pg.display.set_caption(self.settings.caption)
-        clock = pg.time.Clock()
+        #clock = pg.time.Clock()
 
         # Создаю табло времени
         time_box = lm.TextBox("00:00", 1100, 20)
@@ -60,6 +63,8 @@ class Levels_game:
             time_box.elapsed_time = pg.time.get_ticks() - self.start_ticks
             time_box.formatted_time = time_box.format_time(time_box.elapsed_time)
 
+            # движение врагов
+            Char.general_call("autorun", self.current_level.platforms)
 
             # Обработка нажатий клавиш
             keys = pg.key.get_pressed()
@@ -83,6 +88,6 @@ class Levels_game:
             # После отрисовки всего, переворачиваем экран
             pg.display.flip()
 
-        return time_box.formatted_time, self.elapsed_time
+        return time_box.formatted_time
 
         #pg.quit()
