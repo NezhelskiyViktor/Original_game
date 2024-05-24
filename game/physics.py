@@ -93,7 +93,7 @@ class Char(pg.sprite.Sprite):
         for enemy in enemies:
             if self.rect.colliderect(enemy):
                 lives -= 1
-                current_level.show_hearts(lives, current_level)
+                current_level.show_hearts(lives) #, current_level)
                 print("BANG!!! Осталось жизней:", lives)
                 if not self.got_more_lives(lives): pg.quit()# если жизни кончились, жёстко выходим
                 self.rect.x = 30

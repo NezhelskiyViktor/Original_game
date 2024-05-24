@@ -51,16 +51,9 @@ class Levels_game:
         self.current_level.crate_bonuses(bonuses_list)
 
         # Количество жизней показываем сердечками
-        self.show_hearts(self.lives)
+        self.current_level.show_hearts(self.lives)
 
-    def show_hearts(self):
-        for i in range(self.lives):   #  Количество жизней
-            heart = pg.sprite.Sprite()
-            heart.image = pg.transform.scale(pg.image.load('res/graphics/heart.png'), (30, 30))   # Масштабирование
-            heart.rect = heart.image.get_rect()
-            heart.rect.x = 10 + i * heart.rect.width
-            heart.rect.y = 10
-            self.current_level.hearts_sprites_group.add(heart)
+
 
 
     def run_game(self, screen):
@@ -73,6 +66,10 @@ class Levels_game:
         time_box = lm.TextBox("00:00", 1100, 20)
         self.current_level.all_sprites.add(time_box)
 
+        # Создаю табло очков
+        points_box = lm.PointsBox ("Счёт: 0", 600, 20)
+        self.current_level.all_sprites.add(points_box)
+
         running = True
         while running:
             # Держим цикл на правильной скорости
@@ -84,6 +81,10 @@ class Levels_game:
             # Считаем прошедшее время с начала игры
             time_box.elapsed_time = pg.time.get_ticks() - self.start_ticks
             time_box.formatted_time = time_box.format_time(time_box.elapsed_time)
+
+            # обновляем очки на табло
+            points_box.text = f"Счёт: {self.score}"
+            points_box.update()
 
             # движение врагов
             Char.general_call("autorun", self.current_level.platforms)

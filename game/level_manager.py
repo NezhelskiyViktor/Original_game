@@ -71,6 +71,18 @@ class Level():
             self.bonuses[bonus_id].rect.y = bonus[1] - self.bonuses[bonus_id].rect.height
             self.bonuses_sprites_group.add(self.bonuses[bonus_id])
 
+    def show_hearts(self, lives):
+        if len(self.hearts_sprites_group) > lives:
+            self.hearts_sprites_group.empty()
+        for i in range(lives):   #  Количество жизней
+            heart = pg.sprite.Sprite()
+            heart.image = pg.transform.scale(pg.image.load('res/graphics/heart.png'), (30, 30))   # Масштабирование
+            heart.rect = heart.image.get_rect()
+            heart.rect.x = 10 + i * heart.rect.width
+            heart.rect.y = 10
+            self.hearts_sprites_group.add(heart)
+
+
     def update(self):        # Обновление спрайтов
         self.bg_group.update()
         self.platforms.update()
@@ -88,6 +100,20 @@ class Level():
         self.hearts_sprites_group.draw(screen)
 
 
+# Табло очков
+class PointsBox(pg.sprite.Sprite):
+    def __init__(self, text, x, y):
+        pg.sprite.Sprite.__init__(self)
+        self.text = text
+        self.font = pg.font.Font("res/font/arialbi.ttf", 30)
+        self.image = self.font.render(self.text, False, res.RED)
+        self.rect = self.image.get_rect()
+        self.rect.centerx = x
+        self.rect.centery = y
+
+    def update(self):
+        #self.text = f"Счёт: {self.score}"
+        self.image = self.font.render(self.text, False, res.RED)
 
 # Табло времени
 class TextBox(pg.sprite.Sprite):
@@ -115,6 +141,7 @@ class TextBox(pg.sprite.Sprite):
     def update(self):
         self.text = self.format_time(self.elapsed_time)
         self.image = self.font.render(self.text, False, res.RED)
+
 
 
 
