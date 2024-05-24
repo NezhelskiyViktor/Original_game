@@ -129,7 +129,6 @@ class GameEngine:
             self.settings.music_volume,
             self.settings.show_move
         )
-#        print("До: ", installations)
 
         mini_menu = mini.MiniMenu(screen, 800, 5)
         installations = mini_menu.run(installations)
@@ -143,7 +142,6 @@ class GameEngine:
          self.settings.music_volume,
          self.settings.show_move
          ) = installations
-#        print("После: ", installations)
 
         pg.mixer.music.stop()
         if self.settings.music:
