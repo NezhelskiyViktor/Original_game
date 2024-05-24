@@ -13,8 +13,10 @@ class Level():
         self.enemies_sprites_group = pg.sprite.Group() # отдельная группа для спрайтов врагов
         self.bonuses_sprites_group = pg.sprite.Group() # отдельная группа для спрайтов бонусов
         self.bg_group = pg.sprite.Group() # отдельная группа спрайтов для одного фона
-        self.all_sprites = pg.sprite.Group()  # основные спрайты (колобок, бонусы и т.п.)
+        self.all_sprites = pg.sprite.Group()  # основные спрайты (колобок)
         self.platforms = pg.sprite.Group()  # платформы - отдельно для проверки коллизий (для прыжков и падений)
+        self.hearts_sprites_group = pg.sprite.Group()
+
 
     def create_level(self):
     # создание фона
@@ -69,6 +71,18 @@ class Level():
             self.bonuses[bonus_id].rect.y = bonus[1] - self.bonuses[bonus_id].rect.height
             self.bonuses_sprites_group.add(self.bonuses[bonus_id])
 
+    def show_hearts(self, lives):
+        if len(self.hearts_sprites_group) > lives:
+            self.hearts_sprites_group.empty()
+        for i in range(lives):   #  Количество жизней
+            heart = pg.sprite.Sprite()
+            heart.image = pg.transform.scale(pg.image.load('res/graphics/heart.png'), (30, 30))   # Масштабирование
+            heart.rect = heart.image.get_rect()
+            heart.rect.x = 10 + i * heart.rect.width
+            heart.rect.y = 10
+            self.hearts_sprites_group.add(heart)
+
+
     def update(self):        # Обновление спрайтов
         self.bg_group.update()
         self.platforms.update()
@@ -83,9 +97,23 @@ class Level():
         self.all_sprites.draw(screen)
         self.bonuses_sprites_group.draw(screen)
         self.enemies_sprites_group.draw(screen)
+        self.hearts_sprites_group.draw(screen)
 
 
+# Табло очков
+class PointsBox(pg.sprite.Sprite):
+    def __init__(self, text, x, y):
+        pg.sprite.Sprite.__init__(self)
+        self.text = text
+        self.font = pg.font.Font("res/font/arialbi.ttf", 30)
+        self.image = self.font.render(self.text, False, res.RED)
+        self.rect = self.image.get_rect()
+        self.rect.centerx = x
+        self.rect.centery = y
 
+    def update(self):
+        #self.text = f"Счёт: {self.score}"
+        self.image = self.font.render(self.text, False, res.RED)
 
 # Табло времени
 class TextBox(pg.sprite.Sprite):
@@ -116,13 +144,14 @@ class TextBox(pg.sprite.Sprite):
 
 
 
+
 # Платформы. Нулевая - всегда земля. [Х, Y, длина в рх (по факту будет кратна спрайту)]
 LEVEL1_PLATFORMS =[
     [0, 670, 1200],
     [200, 570, 300],
     [600, 470, 200],
     [450, 380, 50],
-    [0, 270, 400],
+    [50, 270, 400],
     [500, 170, 200],
     [800, 250, 200],
     [1100, 350, 100],
@@ -131,9 +160,8 @@ LEVEL1_PLATFORMS =[
 
 # Враги [здоровье, скорость, фото, x (платформы, на которой оно стоит), y (верх платформы)]
 LEVEL1_ENEMIES = [
-    [1, 1, 'res/graphics/zayac57x150_right.png', 100, 270],
-    [1, 3, 'res/graphics/zayac57x150_right.png', 650, 470],
-    [1, 2, 'res/graphics/zayac57x150_right.png', 800, 670]
+        [1, 1, 'res/graphics/zayac57x150_right.png', 800, 670],
+        [1, 0, 'res/graphics/kolyuchka01.png', 700, 670],
 ]
 
 LEVEL1_OBSTACLES = [
@@ -153,10 +181,10 @@ LEVEL1_BONUSES = [
 
 LEVEL2_PLATFORMS =[
     [0, 670, 1200],
-    [200, 570, 300],
+    [190, 570, 300],
     [600, 470, 200],
     [450, 380, 50],
-    [0, 270, 400],
+    [50, 270, 400],
     [500, 170, 200],
     [800, 250, 200],
     [1100, 350, 100],
@@ -164,9 +192,10 @@ LEVEL2_PLATFORMS =[
 ]
 
 LEVEL2_ENEMIES = [
-    [1, 1, 'res/graphics/medved122x180_right.png', 100, 270],
-    [1, 3, 'res/graphics/medved122x180_right.png', 650, 470],
-    [1, 2, 'res/graphics/medved122x180_right.png', 800, 670]
+    [1, 2, 'res/graphics/medved122x180_right.png', 100, 270],
+    [1, 2, 'res/graphics/medved122x180_right.png', 650, 470],
+    [1, 0, 'res/graphics/kolyuchka01.png', 700, 670],
+    [1, 0, 'res/graphics/kolyuchka01.png', 1150, 570],
 ]
 
 LEVEL2_OBSTACLES = [
@@ -193,9 +222,12 @@ LEVEL3_PLATFORMS =[
 ]
 
 LEVEL3_ENEMIES = [
-    [1, 1, 'res/graphics/lisa84x165_right.png', 100, 270],
-    [1, 3, 'res/graphics/lisa84x165_right.png', 650, 470],
-    [1, 2, 'res/graphics/lisa84x165_right.png', 800, 670]
+    [1, 3, 'res/graphics/lisa84x165_right.png', 100, 270],
+    [1, 2, 'res/graphics/lisa84x165_right.png', 650, 470],
+    [1, 3, 'res/graphics/lisa84x165_right.png', 800, 670],
+    [1, 0, 'res/graphics/kolyuchka01.png', 700, 670],
+    [1, 0, 'res/graphics/kolyuchka01.png', 1150, 570],
+    [1, 0, 'res/graphics/kolyuchka01.png', 120, 270],
 ]
 
 LEVEL3_OBSTACLES = [
@@ -222,9 +254,12 @@ LEVEL4_PLATFORMS =[
 ]
 
 LEVEL4_ENEMIES = [
-    [1, 1, 'res/graphics/zayac57x150_hitbox.png', 100, 270],
+    [1, 3, 'res/graphics/zayac57x150_hitbox.png', 100, 270],
     [1, 3, 'res/graphics/zayac57x150_hitbox.png', 650, 470],
-    [1, 2, 'res/graphics/zayac57x150_hitbox.png', 800, 670]
+    [1, 3, 'res/graphics/zayac57x150_hitbox.png', 800, 670],
+    [1, 0, 'res/graphics/kolyuchka01.png', 700, 670],
+    [1, 0, 'res/graphics/kolyuchka01.png', 1150, 570],
+    [1, 0, 'res/graphics/kolyuchka01.png', 120, 270],
 ]
 
 LEVEL4_OBSTACLES = [
