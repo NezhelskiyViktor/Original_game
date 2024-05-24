@@ -20,7 +20,6 @@ class Levels_game:
         self.level_index = game_state['current_level']
         self.current_level = lm.Level(1, lm.LEVEL1_PLATFORMS, lm.LEVEL1_ENEMIES, lm.LEVEL1_OBSTACLES, lm.LEVEL1_BONUSES)
 
-        print(self.lives)
 
         # создаю колобка
         self.kolobok = ph.Char(5, 3, 'res/graphics/kolobok_50x50_right.png', 670)
@@ -38,6 +37,8 @@ class Levels_game:
 
         # создаю врагов
         self.current_level.create_enemies(lm.LEVEL1_ENEMIES)
+        # создаю бонусы
+        self.current_level.crate_bonuses(lm.LEVEL1_BONUSES)
 
         # Количество жизней показываем сердечками
         self.heart = pg.sprite.Group()
@@ -93,7 +94,11 @@ class Levels_game:
 
             # проверяем столкновения с врагами
             self.kolobok.check_hit_enemy(self.current_level.enemies_sprites_group)
-            #print(self.kolobok.rect.topleft, self.kolobok.rect.bottomright)
+
+            # проверяем столкновения с Бонусами
+            self.kolobok.check_get_bonus(self.current_level.bonuses_sprites_group, self.current_level.bonuses)
+
+
             # Рендеринг
             self.current_level.update()
             self.current_level.draw(screen)
