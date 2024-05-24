@@ -25,12 +25,18 @@ if __name__ == '__main__':
     if settings.show_move:
         move.run_move(screen)
 
-    game = GameEngine(settings)
-    message = game.run(screen)
+    #game = GameEngine(settings)
+    #message = game.run(screen)
 
     # Запуск основного цикла игры
-    game = Levels_game(settings, lives=4, score=10)
-    formated_time = game.run_game(screen)
+    game_state = db.get_game_state()
+    level_index = game_state['current_level']
+    while level_index <=4:
+        game = Levels_game(settings, game_state)
+        formated_time, lives, score, level_index = game.run_game(screen)
+        level_index += 1
+    #else: print('Все уровни пройдены')
+
     # Завершение работы
     print("Время игры:", formated_time)  #, "Милисекунд:", elapsed_time)
 

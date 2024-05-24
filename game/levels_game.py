@@ -5,26 +5,38 @@ import game.resources as res
 import game.level_manager as lm
 
 
-
 class Levels_game:
     # пока задаём текщий уровень жёстко в коде, потом будет считываться из файла
 
     #elapsed_time = 0
 
-    def __init__(self, settings, lives, score):
+    def __init__(self, settings, game_state):
         self.start_ticks = pg.time.get_ticks()
         self.setting = settings
         self.clock = pg.time.Clock()
-        self.lives = lives
-        self.score = score
+        self.lives = game_state['lives']
+        self.score = game_state['score']
         self.font, _, _, _ = res.load_fonts()
+        self.level_index = game_state['current_level']
         self.current_level = lm.Level(1, lm.LEVEL1_PLATFORMS, lm.LEVEL1_ENEMIES, lm.LEVEL1_OBSTACLES, lm.LEVEL1_BONUSES)
+
+        print(self.lives)
 
         # создаю колобка
         self.kolobok = ph.Char(5, 3, 'res/graphics/kolobok_50x50_right.png', 670)
-        self.kolobok.rect = pg.Rect(30, settings.screen_height - 30, 50, 40)
+        #self.kolobok.rect = pg.Rect(30, settings.screen_height - 30, 50, 40)
+        # Задаем rect так, чтобы он был меньше на 10 пикселей со всех сторон
+        self.kolobok.rect = self.kolobok.image.get_rect()
+
+        self.kolobok.rect.inflate_ip(-10, -10)  # Уменьшаем размеры на 10 пикселей
+        #self.kolobok.rect.topleft = (self.kolobok.rect.left + 100, self.kolobok.rect.top + 100) #- этот код не работает(((
+        #self.kolobok.rect.move(50,50) # тоже не смещает rect((((
+
+        self.kolobok.rect.x = 30
+        self.kolobok.rect.y = settings.screen_height - 90
         self.current_level.all_sprites.add(self.kolobok)
 
+        # создаю врагов
         self.current_level.create_enemies(lm.LEVEL1_ENEMIES)
 
         # Количество жизней показываем сердечками
@@ -41,12 +53,9 @@ class Levels_game:
 
     def run_game(self, screen):
         # ОСНОВНОЙ ЦИКЛ ИГРЫ
-        #pg.init()
-        #screen = pg.display.set_mode((self.setting.screen_width, self.setting.screen_height))
+
+        # создание уровня
         self.current_level.create_level()
-        #start_ticks = pg.time.get_ticks()
-        #pg.display.set_caption(self.settings.caption)
-        #clock = pg.time.Clock()
 
         # Создаю табло времени
         time_box = lm.TextBox("00:00", 1100, 20)
@@ -57,6 +66,7 @@ class Levels_game:
             # Держим цикл на правильной скорости
             self.clock.tick(self.setting.fps)
             for event in pg.event.get():
+
                 if event.type == pg.QUIT: running = False
 
             # Считаем прошедшее время с начала игры
@@ -68,19 +78,22 @@ class Levels_game:
 
             # Обработка нажатий клавиш
             keys = pg.key.get_pressed()
-            if keys[pg.K_a]:
+            if keys[pg.K_a] or keys[pg.K_LEFT]:
                 self.kolobok.image = pg.image.load('res/graphics/kolobok_50x50_left.png')
                 if self.kolobok.rect.left > 0: self.kolobok.rect.x -= self.kolobok.h_speed
-            if keys[pg.K_d]:
+            if keys[pg.K_d] or keys[pg.K_RIGHT]:
                 self.kolobok.image = pg.image.load('res/graphics/kolobok_50x50_right.png')
                 if self.kolobok.rect.right < self.setting.screen_width: self.kolobok.rect.x += self.kolobok.h_speed
-            if keys[pg.K_SPACE]:
+            if keys[pg.K_SPACE] or keys[pg.K_UP]:
                 self.kolobok.jump()
 
             # ищем землю под колобком
             if self.kolobok.find_nearest_platform(self.current_level.platforms):
                 self.kolobok.current_ground_y = self.kolobok.find_nearest_platform(self.current_level.platforms)[1]
 
+            # проверяем столкновения с врагами
+            self.kolobok.check_hit_enemy(self.current_level.enemies_sprites_group)
+            #print(self.kolobok.rect.topleft, self.kolobok.rect.bottomright)
             # Рендеринг
             self.current_level.update()
             self.current_level.draw(screen)
@@ -88,6 +101,7 @@ class Levels_game:
             # После отрисовки всего, переворачиваем экран
             pg.display.flip()
 
-        return time_box.formatted_time
+        return time_box.formatted_time, self.lives, self.score, self.kolobok.current_ground_y
+
 
         #pg.quit()

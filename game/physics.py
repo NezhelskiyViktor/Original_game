@@ -89,3 +89,9 @@ class Char(pg.sprite.Sprite):
         else:
             return None  # Если подходящих платформ нет, возвращаем None
 
+
+    def check_hit_enemy(self, enemies):
+        for enemy in enemies:
+            if self.rect.colliderect(enemy):
+                print("BANG!!!")
+                enemies.remove(enemy)
