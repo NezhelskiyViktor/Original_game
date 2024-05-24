@@ -70,11 +70,10 @@ class Char(pg.sprite.Sprite):
     def find_nearest_platform(self, platforms):
         closest_platform = None
         closest_distance = float('inf')  # Установим очень большое начальное значение
-
+        #n = 0
         for platform in platforms:
+            #n += 1
             # Платформа должна быть ниже персонажа...
-            n = 0
-            n += 1
             if platform.rect.top >= self.rect.bottom:
 
                 # ...и пересекаться с персонажем по оси X на половину ширины колобка
@@ -96,15 +95,20 @@ class Char(pg.sprite.Sprite):
                 print("BANG!!!")
                 enemies.remove(enemy)
 
-    def check_get_bonus(self, sprites, bonuses):
-        for bonus in sprites:
+    def check_get_bonus(self, bonuses, score):
+        for bonus in bonuses:
             if self.rect.colliderect(bonus):
                 if bonus.points == 0:
                     print("Level Cleared")
+                    return True, score # уровень пройден
+
                 else:
-                    
-                    print(f"Bonus collected, {bonus.points} points!")
-                sprites.remove(bonus)
+                    score += bonus.points
+                    print(f"Bonus collected, {bonus.points} points! Current score: {score}")
+
+                bonuses.remove(bonus)
+        return False, score
+
 
 class Bonus(Char):
     def __init__(self, health, speed, image, current_ground_y, points):

@@ -3,12 +3,11 @@ import game.physics as ph
 from game.physics import Char
 import game.resources as res
 import game.level_manager as lm
-
+import game.game_database as db
+import settings
 
 class Levels_game:
-    # пока задаём текщий уровень жёстко в коде, потом будет считываться из файла
 
-    #elapsed_time = 0
 
     def __init__(self, settings, game_state):
         self.start_ticks = pg.time.get_ticks()
@@ -18,7 +17,17 @@ class Levels_game:
         self.score = game_state['score']
         self.font, _, _, _ = res.load_fonts()
         self.level_index = game_state['current_level']
-        self.current_level = lm.Level(1, lm.LEVEL1_PLATFORMS, lm.LEVEL1_ENEMIES, lm.LEVEL1_OBSTACLES, lm.LEVEL1_BONUSES)
+        platforms_list_name = 'LEVEL{}_PLATFORMS'.format(self.level_index)# Конструируем имя списка платформ как строку
+        platforms_list = getattr(lm, platforms_list_name)# Используем getattr для получения соответствующего списка платформ из модуля lm
+        enemies_list_name = 'LEVEL{}_ENEMIES'.format(self.level_index)
+        enemies_list = getattr(lm, enemies_list_name)
+        obstacles_list_name = 'LEVEL{}_OBSTACLES'.format(self.level_index)
+        obstacles_list = getattr(lm, obstacles_list_name)
+        bonuses_list_name = 'LEVEL{}_BONUSES'.format(self.level_index)
+        bonuses_list = getattr(lm, bonuses_list_name)
+        print(f"Текущий уровень = {self.level_index} - сообщение при создании уровня")
+        self.current_level = lm.Level(self.level_index, platforms_list, enemies_list, obstacles_list, bonuses_list)
+
 
 
         # создаю колобка
@@ -36,9 +45,9 @@ class Levels_game:
         self.current_level.all_sprites.add(self.kolobok)
 
         # создаю врагов
-        self.current_level.create_enemies(lm.LEVEL1_ENEMIES)
+        self.current_level.create_enemies(enemies_list)
         # создаю бонусы
-        self.current_level.crate_bonuses(lm.LEVEL1_BONUSES)
+        self.current_level.crate_bonuses(bonuses_list)
 
         # Количество жизней показываем сердечками
         self.heart = pg.sprite.Group()
@@ -56,7 +65,7 @@ class Levels_game:
         # ОСНОВНОЙ ЦИКЛ ИГРЫ
 
         # создание уровня
-        self.current_level.create_level()
+        self.current_level.create_level()#self.level_index)
 
         # Создаю табло времени
         time_box = lm.TextBox("00:00", 1100, 20)
@@ -95,9 +104,19 @@ class Levels_game:
             # проверяем столкновения с врагами
             self.kolobok.check_hit_enemy(self.current_level.enemies_sprites_group)
 
-            # проверяем столкновения с Бонусами
-            self.kolobok.check_get_bonus(self.current_level.bonuses_sprites_group, self.current_level.bonuses)
-
+            # проверяем столкновения с бонусами (здесь level_completed = True означает окончание уровня)
+            level_completed, self.score = self.kolobok.check_get_bonus(self.current_level.bonuses_sprites_group, self.score)
+            if level_completed:
+                self.level_index += 1
+                db.update_game_state(
+                    self.setting.difficulty_level,
+                    self.level_index,
+                    self.score,
+                    time_box.formatted_time,
+                    self.lives)
+                print(
+                    f"Записано состояние игры поcле основного цикла в levels_game. self.current_level = {self.level_index}")
+                return time_box.formatted_time, self.lives, self.score, self.level_index
 
             # Рендеринг
             self.current_level.update()
@@ -105,8 +124,14 @@ class Levels_game:
 
             # После отрисовки всего, переворачиваем экран
             pg.display.flip()
-
-        return time_box.formatted_time, self.lives, self.score, self.kolobok.current_ground_y
+        db.update_game_state(
+            self.setting.difficulty_level,
+            self.level_index,
+            self.score,
+            time_box.formatted_time,
+            self.lives)
+        print(f"Записано состояние игры поcле основного цикла в levels_game. self.current_level = {self.level_index}")
+        return time_box.formatted_time, self.lives, self.score, self.level_index
 
 
         #pg.quit()

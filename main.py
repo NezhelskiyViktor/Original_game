@@ -12,7 +12,7 @@ if __name__ == '__main__':
     settings = settings.Settings()
     screen = pg.display.set_mode((settings.screen_width, settings.screen_height))
     pg.display.set_caption(settings.caption)
-
+    formatted_time = "00:00"
     db.init_database()
     db_settings = db.get_settings()
     settings.difficulty_level = db_settings['difficulty_level']
@@ -28,17 +28,30 @@ if __name__ == '__main__':
     #game = GameEngine(settings)
     #message = game.run(screen)
 
-    # Запуск основного цикла игры
+
+    # Проверка номера текущего уровня. Если > 4, то начинаем с первого
     game_state = db.get_game_state()
     level_index = game_state['current_level']
+    print(f'Текущий уровень = {level_index} - сообщени при старте программы')
+    if level_index > 4:
+        level_index = 1
+        db.update_game_state(                   # здесь надо обнулить все настройки, потому что начинается новая игра
+            settings.difficulty_level,
+            1,
+            0,
+            0,
+            game_state['lives'])
+        print(f"Записано состояние игры, т.к. текущий уровень > 4. self.current_level = {level_index}")
+    # Запуск основного цикла игры
     while level_index <=4:
-        game = Levels_game(settings, game_state)
-        formated_time, lives, score, level_index = game.run_game(screen)
-        level_index += 1
-    #else: print('Все уровни пройдены')
+        print(f'Текущий уровень = {level_index} (сообщение изнутри основного цикла while в main)')
+        game = Levels_game(settings, db.get_game_state())
+        formatted_time, lives, score, level_index = game.run_game(screen)
+        #level_index += 1
 
-    # Завершение работы
-    print("Время игры:", formated_time)  #, "Милисекунд:", elapsed_time)
+        # Завершение работы
+    print(f'Все уровни пройдены, текущий уровень = {level_index}')
+    print(f"Время игры: {formatted_time}, набрано {score} очков. Количество жизней: {lives}.")
 
     db.update_settings(
         settings.music,
@@ -48,5 +61,12 @@ if __name__ == '__main__':
         settings.show_move,
         settings.difficulty_level)
 
+    db.update_game_state(
+        settings.difficulty_level,
+        level_index,
+        score,
+        formatted_time,
+        lives)
+    print(f"Записано состояние игры перед выходом. self.current_level = {level_index}")
     pg.quit()
 
