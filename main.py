@@ -28,11 +28,22 @@ if __name__ == '__main__':
     #game = GameEngine(settings)
     #message = game.run(screen)
 
+    '''
+    чисто на время отладки
+        '''
+    db.update_game_state(
+        settings.difficulty_level,
+        1,
+        0,
+        0,
+        5)
+
+
 
     # Проверка номера текущего уровня. Если > 4, то начинаем с первого
     game_state = db.get_game_state()
     level_index = game_state['current_level']
-    print(f'Текущий уровень = {level_index} - сообщени при старте программы')
+    #print(f'Текущий уровень = {level_index} - сообщени при старте программы')
     if level_index > 4:
         level_index = 1
         db.update_game_state(                   # здесь надо обнулить все настройки, потому что начинается новая игра
@@ -40,11 +51,11 @@ if __name__ == '__main__':
             1,
             0,
             0,
-            game_state['lives'])
-        print(f"Записано состояние игры, т.к. текущий уровень > 4. self.current_level = {level_index}")
+            5)
+        #print(f"Записано состояние игры, т.к. текущий уровень > 4. self.current_level = {level_index}")
     # Запуск основного цикла игры
     while level_index <=4:
-        print(f'Текущий уровень = {level_index} (сообщение изнутри основного цикла while в main)')
+        #print(f'Текущий уровень = {level_index} (сообщение изнутри основного цикла while в main)')
         game = Levels_game(settings, db.get_game_state())
         formatted_time, lives, score, level_index = game.run_game(screen)
         #level_index += 1
@@ -67,6 +78,6 @@ if __name__ == '__main__':
         score,
         formatted_time,
         lives)
-    print(f"Записано состояние игры перед выходом. self.current_level = {level_index}")
+    #print(f"Записано состояние игры перед выходом. self.current_level = {level_index}")
     pg.quit()
 

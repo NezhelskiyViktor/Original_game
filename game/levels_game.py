@@ -16,6 +16,7 @@ class Levels_game:
         self.lives = game_state['lives']
         self.score = game_state['score']
         self.font, _, _, _ = res.load_fonts()
+        #self.heart = pg.sprite.Group()
         self.level_index = game_state['current_level']
         platforms_list_name = 'LEVEL{}_PLATFORMS'.format(self.level_index)# Конструируем имя списка платформ как строку
         platforms_list = getattr(lm, platforms_list_name)# Используем getattr для получения соответствующего списка платформ из модуля lm
@@ -25,7 +26,7 @@ class Levels_game:
         obstacles_list = getattr(lm, obstacles_list_name)
         bonuses_list_name = 'LEVEL{}_BONUSES'.format(self.level_index)
         bonuses_list = getattr(lm, bonuses_list_name)
-        print(f"Текущий уровень = {self.level_index} - сообщение при создании уровня")
+        #print(f"Текущий уровень = {self.level_index} - сообщение при создании уровня")
         self.current_level = lm.Level(self.level_index, platforms_list, enemies_list, obstacles_list, bonuses_list)
 
 
@@ -50,15 +51,16 @@ class Levels_game:
         self.current_level.crate_bonuses(bonuses_list)
 
         # Количество жизней показываем сердечками
-        self.heart = pg.sprite.Group()
+        self.show_hearts(self.lives)
+
+    def show_hearts(self):
         for i in range(self.lives):   #  Количество жизней
             heart = pg.sprite.Sprite()
             heart.image = pg.transform.scale(pg.image.load('res/graphics/heart.png'), (30, 30))   # Масштабирование
             heart.rect = heart.image.get_rect()
             heart.rect.x = 10 + i * heart.rect.width
             heart.rect.y = 10
-            self.heart.add(heart)
-            self.current_level.all_sprites.add(heart)
+            self.current_level.hearts_sprites_group.add(heart)
 
 
     def run_game(self, screen):
@@ -102,7 +104,7 @@ class Levels_game:
                 self.kolobok.current_ground_y = self.kolobok.find_nearest_platform(self.current_level.platforms)[1]
 
             # проверяем столкновения с врагами
-            self.kolobok.check_hit_enemy(self.current_level.enemies_sprites_group)
+            self.lives = self.kolobok.check_hit_enemy(self.current_level.enemies_sprites_group, self.lives, self.current_level)
 
             # проверяем столкновения с бонусами (здесь level_completed = True означает окончание уровня)
             level_completed, self.score = self.kolobok.check_get_bonus(self.current_level.bonuses_sprites_group, self.score)
@@ -114,8 +116,7 @@ class Levels_game:
                     self.score,
                     time_box.formatted_time,
                     self.lives)
-                print(
-                    f"Записано состояние игры поcле основного цикла в levels_game. self.current_level = {self.level_index}")
+                #print(f"Записано состояние игры поcле основного цикла в levels_game. self.current_level = {self.level_index}")
                 return time_box.formatted_time, self.lives, self.score, self.level_index
 
             # Рендеринг
@@ -130,7 +131,7 @@ class Levels_game:
             self.score,
             time_box.formatted_time,
             self.lives)
-        print(f"Записано состояние игры поcле основного цикла в levels_game. self.current_level = {self.level_index}")
+        #print(f"Записано состояние игры поcле основного цикла в levels_game. self.current_level = {self.level_index}")
         return time_box.formatted_time, self.lives, self.score, self.level_index
 
 

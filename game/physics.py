@@ -89,11 +89,25 @@ class Char(pg.sprite.Sprite):
             return None  # Если подходящих платформ нет, возвращаем None
 
 
-    def check_hit_enemy(self, enemies):
+    def check_hit_enemy(self, enemies, lives, current_level):
         for enemy in enemies:
             if self.rect.colliderect(enemy):
-                print("BANG!!!")
-                enemies.remove(enemy)
+                lives -= 1
+                current_level.show_hearts(lives, current_level)
+                print("BANG!!! Осталось жизней:", lives)
+                if not self.got_more_lives(lives): pg.quit()# если жизни кончились, жёстко выходим
+                self.rect.x = 30
+                self.rect.y = 670
+                #current_level.hearts_sprites_group.remove(len(current_level.hearts_sprites_group) - 1)
+                #enemies.remove(enemy)
+        return lives
+
+    def got_more_lives(self, lives):
+        if lives <= 0:
+            print("Game Over")
+            return False
+        else:
+            return True
 
     def check_get_bonus(self, bonuses, score):
         for bonus in bonuses:

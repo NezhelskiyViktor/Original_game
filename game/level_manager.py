@@ -13,8 +13,10 @@ class Level():
         self.enemies_sprites_group = pg.sprite.Group() # отдельная группа для спрайтов врагов
         self.bonuses_sprites_group = pg.sprite.Group() # отдельная группа для спрайтов бонусов
         self.bg_group = pg.sprite.Group() # отдельная группа спрайтов для одного фона
-        self.all_sprites = pg.sprite.Group()  # основные спрайты (колобок, бонусы и т.п.)
+        self.all_sprites = pg.sprite.Group()  # основные спрайты (колобок)
         self.platforms = pg.sprite.Group()  # платформы - отдельно для проверки коллизий (для прыжков и падений)
+        self.hearts_sprites_group = pg.sprite.Group()
+
 
     def create_level(self):
     # создание фона
@@ -83,7 +85,7 @@ class Level():
         self.all_sprites.draw(screen)
         self.bonuses_sprites_group.draw(screen)
         self.enemies_sprites_group.draw(screen)
-
+        self.hearts_sprites_group.draw(screen)
 
 
 
@@ -122,7 +124,7 @@ LEVEL1_PLATFORMS =[
     [200, 570, 300],
     [600, 470, 200],
     [450, 380, 50],
-    [0, 270, 400],
+    [50, 270, 400],
     [500, 170, 200],
     [800, 250, 200],
     [1100, 350, 100],
@@ -131,9 +133,7 @@ LEVEL1_PLATFORMS =[
 
 # Враги [здоровье, скорость, фото, x (платформы, на которой оно стоит), y (верх платформы)]
 LEVEL1_ENEMIES = [
-    [1, 1, 'res/graphics/zayac57x150_right.png', 100, 270],
-    [1, 3, 'res/graphics/zayac57x150_right.png', 650, 470],
-    [1, 2, 'res/graphics/zayac57x150_right.png', 800, 670]
+        [1, 1, 'res/graphics/zayac57x150_right.png', 800, 670]
 ]
 
 LEVEL1_OBSTACLES = [
@@ -153,10 +153,10 @@ LEVEL1_BONUSES = [
 
 LEVEL2_PLATFORMS =[
     [0, 670, 1200],
-    [200, 570, 300],
+    [190, 570, 300],
     [600, 470, 200],
     [450, 380, 50],
-    [0, 270, 400],
+    [50, 270, 400],
     [500, 170, 200],
     [800, 250, 200],
     [1100, 350, 100],
@@ -164,9 +164,9 @@ LEVEL2_PLATFORMS =[
 ]
 
 LEVEL2_ENEMIES = [
-    [1, 1, 'res/graphics/medved122x180_right.png', 100, 270],
-    [1, 3, 'res/graphics/medved122x180_right.png', 650, 470],
-    [1, 2, 'res/graphics/medved122x180_right.png', 800, 670]
+    [1, 2, 'res/graphics/medved122x180_right.png', 100, 270],
+    [1, 2, 'res/graphics/medved122x180_right.png', 650, 470],
+
 ]
 
 LEVEL2_OBSTACLES = [
@@ -193,9 +193,9 @@ LEVEL3_PLATFORMS =[
 ]
 
 LEVEL3_ENEMIES = [
-    [1, 1, 'res/graphics/lisa84x165_right.png', 100, 270],
-    [1, 3, 'res/graphics/lisa84x165_right.png', 650, 470],
-    [1, 2, 'res/graphics/lisa84x165_right.png', 800, 670]
+    [1, 3, 'res/graphics/lisa84x165_right.png', 100, 270],
+    [1, 2, 'res/graphics/lisa84x165_right.png', 650, 470],
+    [1, 3, 'res/graphics/lisa84x165_right.png', 800, 670]
 ]
 
 LEVEL3_OBSTACLES = [
@@ -222,9 +222,9 @@ LEVEL4_PLATFORMS =[
 ]
 
 LEVEL4_ENEMIES = [
-    [1, 1, 'res/graphics/zayac57x150_hitbox.png', 100, 270],
+    [1, 3, 'res/graphics/zayac57x150_hitbox.png', 100, 270],
     [1, 3, 'res/graphics/zayac57x150_hitbox.png', 650, 470],
-    [1, 2, 'res/graphics/zayac57x150_hitbox.png', 800, 670]
+    [1, 3, 'res/graphics/zayac57x150_hitbox.png', 800, 670]
 ]
 
 LEVEL4_OBSTACLES = [
