@@ -118,7 +118,7 @@ class Levels_game:
                     time_box.formatted_time,
                     self.lives)
                 #print(f"Записано состояние игры поcле основного цикла в levels_game. self.current_level = {self.level_index}")
-                return time_box.formatted_time, self.lives, self.score, self.level_index
+                return running, time_box.formatted_time, self.lives, self.score, self.level_index
 
             # Рендеринг
             self.current_level.update()
@@ -133,6 +133,7 @@ class Levels_game:
             time_box.formatted_time,
             self.lives)
         #print(f"Записано состояние игры поcле основного цикла в levels_game. self.current_level = {self.level_index}")
+        print(running, time_box.formatted_time, self.lives, self.score, self.level_index)
         return running, time_box.formatted_time, self.lives, self.score, self.level_index
 
 
