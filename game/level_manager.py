@@ -3,8 +3,8 @@ import game.resources as res
 import game.physics as ph
 
 class Level():
-    def __init__(self, index, platforms, enemies, obstacles, bonuses):
-        self.index = index
+    def __init__(self, level_index, platforms, enemies, obstacles, bonuses):
+        self.level_index = level_index
         self.platforms_coord = platforms
         self.enemies = enemies
         self.obstacles = obstacles
@@ -18,7 +18,7 @@ class Level():
 
     def create_level(self):
     # создание фона
-        self.bg.image = pg.image.load(f"res/graphics/fon_0{self.index}.jpg")
+        self.bg.image = pg.image.load(f"res/graphics/fon_0{self.level_index}.jpg")
         self.bg.rect = self.bg.image.get_rect()
         self.bg.rect.y = 0
         self.bg.rect.x = 0
@@ -32,7 +32,7 @@ class Level():
         platform_end = x + length
         while x < platform_end:
             grass = pg.sprite.Sprite()
-            grass.image = pg.image.load(f"res/graphics/grass_0{self.index}.png")
+            grass.image = pg.image.load(f"res/graphics/grass_0{self.level_index}.png")
             grass.rect = grass.image.get_rect()
             grass.rect.y = y  # Позиционируем у нижнего края окна
             grass.rect.x = x
@@ -46,6 +46,7 @@ class Level():
         for index, enemy_data in enumerate(enemies): # Проходим по списку врагов, вытаскиваем индекс и характеристики
             enemy_id = f'enemy{index}'  # Создаем уникальный идентификатор для каждого врага
             self.enemies[enemy_id] = ph.Char(enemy_data[0], enemy_data[1], enemy_data[2], enemy_data[4], True) # Создаем экземпляр класса Char с использованием данных из enemy_data
+
             # Хитбокс меньше размеров картинки (-10 px снизу, чтобы персонаж ходил, чуть погружаясь в траву), по бокам - компенсируем воздух на картинке.
             self.enemies[enemy_id].rect = self.enemies[enemy_id].image.get_rect()
             self.enemies[enemy_id].rect.inflate_ip(-10, -10)  # Уменьшаем размеры на 10 пикселей по каждой оси
@@ -130,22 +131,21 @@ LEVEL1_PLATFORMS =[
 
 # Враги [здоровье, скорость, фото, x (платформы, на которой оно стоит), y (верх платформы)]
 LEVEL1_ENEMIES = [
-    [1, 2, 'res/graphics/lisa84x165_right.png', 100, 270],
-    [1, 1, 'res/graphics/zayac57x150_hitbox.png', 650, 470],
-    [1, 5, 'res/graphics/zayac57x150_right.png', 800, 670]
+    [1, 1, 'res/graphics/zayac57x150_right.png', 100, 270],
+    [1, 3, 'res/graphics/zayac57x150_right.png', 650, 470],
+    [1, 2, 'res/graphics/zayac57x150_right.png', 800, 670]
 ]
 
 LEVEL1_OBSTACLES = [
 
 ]
 
-# Бонусы [x, y, фото стоимость]. Нулевая запись - всегда выход с уровня
+# Бонусы [x, y, фото, стоимость]. Нулевая стоимость - это выход с уровня
 LEVEL1_BONUSES = [
     [1100, 350, 'res/graphics/door_locked.png', 0],
     [400, 670, 'res/graphics/grib03.png', 10],
     [820, 250, 'res/graphics/grib03.png', 10],
     [1120, 570, 'res/graphics/grib03.png', 10],
-    #[400, 670, 'res/graphics/grib03.png', 10],
 ]
 
 
@@ -153,14 +153,20 @@ LEVEL1_BONUSES = [
 
 LEVEL2_PLATFORMS =[
     [0, 670, 1200],
-    [200, 620, 300],
-    [700, 520, 200],
-    [470, 430, 100],
-    [500, 360, 400]
+    [200, 570, 300],
+    [600, 470, 200],
+    [450, 380, 50],
+    [0, 270, 400],
+    [500, 170, 200],
+    [800, 250, 200],
+    [1100, 350, 100],
+    [1000, 570, 200],
 ]
 
 LEVEL2_ENEMIES = [
-
+    [1, 1, 'res/graphics/medved122x180_right.png', 100, 270],
+    [1, 3, 'res/graphics/medved122x180_right.png', 650, 470],
+    [1, 2, 'res/graphics/medved122x180_right.png', 800, 670]
 ]
 
 LEVEL2_OBSTACLES = [
@@ -168,5 +174,66 @@ LEVEL2_OBSTACLES = [
 ]
 
 LEVEL2_BONUSES = [
+    [1100, 350, 'res/graphics/door_locked.png', 0],
+    [400, 670, 'res/graphics/grib03.png', 10],
+    [820, 250, 'res/graphics/grib03.png', 10],
+    [1120, 570, 'res/graphics/grib03.png', 10],
+]
 
+LEVEL3_PLATFORMS =[
+    [0, 670, 1200],
+    [200, 570, 300],
+    [600, 470, 200],
+    [450, 380, 50],
+    [0, 270, 400],
+    [500, 170, 200],
+    [800, 250, 200],
+    [1100, 350, 100],
+    [1000, 570, 200],
+]
+
+LEVEL3_ENEMIES = [
+    [1, 1, 'res/graphics/lisa84x165_right.png', 100, 270],
+    [1, 3, 'res/graphics/lisa84x165_right.png', 650, 470],
+    [1, 2, 'res/graphics/lisa84x165_right.png', 800, 670]
+]
+
+LEVEL3_OBSTACLES = [
+
+]
+
+LEVEL3_BONUSES = [
+    [1100, 350, 'res/graphics/door_locked.png', 0],
+    [400, 670, 'res/graphics/grib03.png', 10],
+    [820, 250, 'res/graphics/grib03.png', 10],
+    [1120, 570, 'res/graphics/grib03.png', 10],
+]
+
+LEVEL4_PLATFORMS =[
+    [0, 670, 1200],
+    [200, 570, 300],
+    [600, 470, 200],
+    [450, 380, 50],
+    [0, 270, 400],
+    [500, 170, 200],
+    [800, 250, 200],
+    [1100, 350, 100],
+    [1000, 570, 200],
+]
+
+LEVEL4_ENEMIES = [
+    [1, 1, 'res/graphics/zayac57x150_hitbox.png', 100, 270],
+    [1, 3, 'res/graphics/zayac57x150_hitbox.png', 650, 470],
+    [1, 2, 'res/graphics/zayac57x150_hitbox.png', 800, 670]
+]
+
+LEVEL4_OBSTACLES = [
+
+]
+
+LEVEL4_BONUSES = [
+    [1100, 350, 'res/graphics/door_locked.png', 0],
+    [400, 670, 'res/graphics/grib03.png', 10],
+    [820, 250, 'res/graphics/grib03.png', 10],
+    [1120, 570, 'res/graphics/grib03.png', 10],
 ]
