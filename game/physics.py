@@ -95,3 +95,18 @@ class Char(pg.sprite.Sprite):
             if self.rect.colliderect(enemy):
                 print("BANG!!!")
                 enemies.remove(enemy)
+
+    def check_get_bonus(self, sprites, bonuses):
+        for bonus in sprites:
+            if self.rect.colliderect(bonus):
+                if bonus.points == 0:
+                    print("Level Cleared")
+                else:
+                    
+                    print(f"Bonus collected, {bonus.points} points!")
+                sprites.remove(bonus)
+
+class Bonus(Char):
+    def __init__(self, health, speed, image, current_ground_y, points):
+        super().__init__(health, speed, image, current_ground_y)
+        self.points = points

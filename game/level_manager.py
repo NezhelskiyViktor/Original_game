@@ -11,6 +11,7 @@ class Level():
         self.bonuses = bonuses
         self.bg = pg.sprite.Sprite()
         self.enemies_sprites_group = pg.sprite.Group() # отдельная группа для спрайтов врагов
+        self.bonuses_sprites_group = pg.sprite.Group() # отдельная группа для спрайтов бонусов
         self.bg_group = pg.sprite.Group() # отдельная группа спрайтов для одного фона
         self.all_sprites = pg.sprite.Group()  # основные спрайты (колобок, бонусы и т.п.)
         self.platforms = pg.sprite.Group()  # платформы - отдельно для проверки коллизий (для прыжков и падений)
@@ -54,6 +55,19 @@ class Level():
             self.enemies_sprites_group.add(self.enemies[enemy_id])
 
 
+    def crate_bonuses(self, bonuses):
+        self.bonuses = {}
+
+        for index, bonus in enumerate(bonuses):
+            bonus_id = f'bonus{index}'
+            self.bonuses[bonus_id] = ph.Bonus(1, 0, bonus[2], bonus[1], bonus[3])
+            self.bonuses[bonus_id].rect = self.bonuses[bonus_id].image.get_rect()
+            self.bonuses[bonus_id].rect.inflate_ip(0, -10)
+            self.bonuses[bonus_id].rect.topleft = (self.bonuses[bonus_id].rect.left + 5, self.bonuses[bonus_id].rect.top + 5)
+            self.bonuses[bonus_id].rect.x = bonus[0]
+            self.bonuses[bonus_id].rect.y = bonus[1] - self.bonuses[bonus_id].rect.height
+            self.bonuses_sprites_group.add(self.bonuses[bonus_id])
+
     def update(self):        # Обновление спрайтов
         self.bg_group.update()
         self.platforms.update()
@@ -66,6 +80,7 @@ class Level():
         self.bg_group.draw(screen)
         self.platforms.draw(screen)
         self.all_sprites.draw(screen)
+        self.bonuses_sprites_group.draw(screen)
         self.enemies_sprites_group.draw(screen)
 
 
@@ -124,8 +139,13 @@ LEVEL1_OBSTACLES = [
 
 ]
 
+# Бонусы [x, y, фото стоимость]. Нулевая запись - всегда выход с уровня
 LEVEL1_BONUSES = [
-
+    [1100, 350, 'res/graphics/door_locked.png', 0],
+    [400, 670, 'res/graphics/grib03.png', 10],
+    [820, 250, 'res/graphics/grib03.png', 10],
+    [1120, 570, 'res/graphics/grib03.png', 10],
+    #[400, 670, 'res/graphics/grib03.png', 10],
 ]
 
 
