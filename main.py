@@ -25,8 +25,8 @@ if __name__ == '__main__':
     if settings.show_move:
         move.run_move(screen)
 
-    #game = GameEngine(settings)
-    #message = game.run(screen)
+    game = GameEngine(settings)
+    message = game.run(screen)
 
     '''
     чисто на время отладки
@@ -42,9 +42,10 @@ if __name__ == '__main__':
 
     game_state = db.get_game_state()
     level_index = game_state['current_level']
-
-    if level_index > 4:     # Проверка номера текущего уровня. Если > 4, то начинаем с первого
+    # Если в мини меню выбрана новая игра или текущий уровень больше 4, то начинаем с первого
+    if settings.game_state == 0 or level_index > 4:
         level_index = 1
+        settings.game_state = 1   # В следующий раз в меню пусть будет сохраненная игра
         db.update_game_state(                   # здесь надо обнулить все настройки, потому что начинается новая игра
             settings.difficulty_level,
             1,
@@ -70,7 +71,8 @@ if __name__ == '__main__':
         settings.music_volume,
         settings.sound_volume,
         settings.show_move,
-        settings.difficulty_level)
+        settings.difficulty_level
+    )
 
     db.update_game_state(
         settings.difficulty_level,

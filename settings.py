@@ -11,4 +11,4 @@ class Settings:
         self.music = True
         self.show_move = False
         self.difficulty_level = 0
-        self.game_state = 0
+        self.game_state = 1
