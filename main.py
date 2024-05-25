@@ -22,29 +22,21 @@ if __name__ == '__main__':
     settings.music = db_settings['use_music']
     settings.show_move = db_settings['show_intro']
 
+    # показываем вступительный ролик, если вкл соотв настройка
     if settings.show_move:
         move.run_move(screen)
 
-    #game = GameEngine(settings)
-    #message = game.run(screen)
-
-    '''
-    чисто на время отладки
-
-    db.update_game_state(
-        settings.difficulty_level,
-        1,
-        0,
-        0,
-        5)
-        '''
-
+    # запуск вступительного экрана
+    game = GameEngine(settings)
+    message = game.run(screen)
 
     game_state = db.get_game_state()
     level_index = game_state['current_level']
 
-    if level_index > 4:     # Проверка номера текущего уровня. Если > 4, то начинаем с первого
+    # запуск основной игры, выбор уровня
+    if settings.game_state == 0 or level_index > 4:     # Проверка номера текущего уровня. Если > 4, то начинаем с первого
         level_index = 1
+        settings.game_state = 1
         db.update_game_state(                   # здесь надо обнулить все настройки, потому что начинается новая игра
             settings.difficulty_level,
             1,

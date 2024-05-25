@@ -254,9 +254,9 @@ LEVEL4_PLATFORMS =[
 ]
 
 LEVEL4_ENEMIES = [
-    [1, 3, 'res/graphics/zayac57x150_hitbox.png', 100, 270],
-    [1, 3, 'res/graphics/zayac57x150_hitbox.png', 650, 470],
-    [1, 3, 'res/graphics/zayac57x150_hitbox.png', 800, 670],
+    [1, 3, 'res/graphics/lisa84x165_right.png', 100, 270],
+    [1, 3, 'res/graphics/medved122x180_right.png', 650, 470],
+    [1, 3, 'res/graphics/zayac57x150_right.png', 800, 670],
     [1, 0, 'res/graphics/kolyuchka01.png', 700, 670],
     [1, 0, 'res/graphics/kolyuchka01.png', 1150, 570],
     [1, 0, 'res/graphics/kolyuchka01.png', 120, 270],
