@@ -13,13 +13,16 @@ def load_background():
     bg = [
     pg.image.load('res/graphics/fon_00.jpg').convert(),  # 0
     pg.image.load('res/graphics/fon_01.jpg').convert(),  # 1
-    pg.image.load('res/graphics/fon_03.jpg').convert()  # 2
+    pg.image.load('res/graphics/fon_03.jpg').convert(),  # 2
+    pg.image.load('res/graphics/fon_04.jpg').convert(),  # 3
+    pg.image.load('res/graphics/fon_05.jpg').convert(),  # 4
+    pg.image.load('res/graphics/fon_06.jpg').convert()  # 5
     ]
     return bg
 
 
 def load_images():
-    kolobok_image_god = pg.image.load('res/graphics/Kolobok_god_mode.png').convert_alpha()
+    kolobok_image_god = pg.image.load('res/graphics/kolobok_50x50_right.png').convert_alpha()
     kolobok_image = pg.image.load('res/graphics/Kolobok_Ivan.png').convert_alpha()
     kolobok_list = []
     for i in range(1, 32):
@@ -27,7 +30,7 @@ def load_images():
         kolobok = pg.transform.scale(kolobok_, (50, 50))  # Масштабирование
         kolobok_list.append(kolobok)
 
-    kolobok = [pg.transform.scale(kolobok_image_god, (50, 50)), \
+    kolobok = [pg.transform.scale(kolobok_image_god, (20, 20)), \
                pg.transform.scale(kolobok_image, (50, 50)), \
                kolobok_list]
     lisa_image = pg.image.load('res/graphics/lisa.png').convert_alpha()

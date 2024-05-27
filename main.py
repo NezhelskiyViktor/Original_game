@@ -5,6 +5,7 @@ import move
 import game.game_database as db  #
 from game.engine import GameEngine  # Основные механики игры
 from game.levels_game import Levels_game
+import game.end_game as end
 
 
 if __name__ == '__main__':
@@ -52,19 +53,14 @@ if __name__ == '__main__':
             0,
             0,
             5)
-        #print(f"Записано состояние игры, т.к. текущий уровень > 4. self.current_level = {level_index}")
+
     # Запуск основного цикла игры
     running = True
     while running and level_index <=4:
-        #print(f'Текущий уровень = {level_index} (сообщение изнутри основного цикла while в main)')
         game = Levels_game(settings, db.get_game_state())
         running, formatted_time, lives, score, level_index = game.run_game(screen)
-        #level_index += 1
 
-        # Завершение работы
-    print(f'Все уровни пройдены, текущий уровень = {level_index}')
-    print(f"Время игры: {formatted_time}, набрано {score} очков. Количество жизней: {lives}.")
-
+    # Завершение работы
     db.update_settings(
         settings.music,
         settings.sound,
@@ -80,6 +76,13 @@ if __name__ == '__main__':
         score,
         formatted_time,
         lives)
+
+    if running:
+        end_game = end.End_game(settings)
+        end_game.run(screen)
+
+    print(f'Все уровни пройдены, текущий уровень = {level_index}')
+    print(f"Время игры: {formatted_time}, набрано {score} очков. Количество жизней: {lives}.")
     #print(f"Записано состояние игры перед выходом. self.current_level = {level_index}")
     pg.quit()
 
