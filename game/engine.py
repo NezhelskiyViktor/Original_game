@@ -30,9 +30,15 @@ class GameEngine:
         self.clock = pg.time.Clock()
         _, self.font28, _, self.font18 = res.load_fonts()
         self.bg = res.load_background()[0]
-        self.kolobok, self.lisa, self.medved, self.zayac = res.load_images()
+        self.kolobok = res.load_images_kolobok()
+        self.lisa = pg.image.load('res/graphics/lisa.png')  # .convert_alpha()
+        self.zayac = pg.image.load('res/graphics/zayac.png')
+        self.medved = pg.image.load('res/graphics/medved_01.png')
         self.state_manager = StateManager()
         self.settings = settings
+        self.set_settings()
+
+    def set_settings(self):
         self.sound = self.settings.sound
         self.sound_volume = self.settings.sound_volume
         self.music = self.settings.music
@@ -40,6 +46,7 @@ class GameEngine:
         self.show_move = self.settings.show_move
 
     def run(self, screen):
+
         sound1 = pg.mixer.Sound(res.load_sound()[0])
         music1 = res.load_music()[0]
         use_sound = True
@@ -54,6 +61,13 @@ class GameEngine:
             running = handler.handle_events(self.state_manager)
             if self.state_manager.state == 'menu':
                 self.go_menu(screen)
+                self.set_settings()
+                pg.mixer.music.stop()
+                if self.settings.music:
+                    pg.mixer.music.load(music1)
+                    pg.mixer.music.set_volume(self.music_volume)
+                    pg.mixer.music.play(loops=-1)
+
             elif self.state_manager.state == 'game':
                 if running == 'L':
                     running = True
@@ -103,17 +117,18 @@ class GameEngine:
             self.kolobok_x += self.x_speed
 
     def render(self, screen):
+        t = int(time.time() * 10 % 4) - 2
         screen.blit(self.bg, (0, 0))
         screen.blit(self.medved, (730, 460))
         if not self.kolobok_running:
-            t = int(time.time() * 10 % 4)
-            screen.blit(self.kolobok[2][-4], (self.kolobok_x, self.kolobok_y - t))
+            # t = int(time.time() * 10 % 4)
+            screen.blit(self.kolobok[1][1], (self.kolobok_x, self.kolobok_y - t))
             screen.blit(self.font28.render('Помогите колобку вернуться домой!',
-                                           True, pg.Color(0, 0, 0)), (340, 267))
-            screen.blit(self.font18.render('Управление колобком клавишами W, A, S, D',
-                                           True, pg.Color(0, 0, 0)), (500, 620))
+                                           True, res.YELLOW), (340, 267 + t))
+            # screen.blit(self.font18.render('Управление колобком клавишами W, A, S, D',
+            #                                True, res.BLUE), (500, 620))
         else:
-            screen.blit(self.kolobok[2][(self.kolobok_x // 5) % 31], (int(self.kolobok_x), int(self.kolobok_y)))
+            screen.blit(self.kolobok[0][(self.kolobok_x // 5) % 12], (int(self.kolobok_x), int(self.kolobok_y)))
         screen.blit(self.lisa, (10, 360))
         screen.blit(self.zayac, (950, 400))
 
@@ -142,8 +157,4 @@ class GameEngine:
          self.settings.music_volume,
          self.settings.show_move
          ) = installations
-
-        pg.mixer.music.stop()
-        if self.settings.music:
-            pg.mixer.music.play(loops=-1)
-            pg.mixer.music.set_volume(self.settings.music_volume)
+        return

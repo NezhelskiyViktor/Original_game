@@ -2,10 +2,10 @@ import pygame as pg
 
 
 def load_fonts():
-    font30 = pg.font.Font('res/font/arialbi.ttf', 30)
-    font28 = pg.font.Font('res/font/arialbi.ttf', 28)
-    font22 = pg.font.Font('res/font/arialbi.ttf', 22)
-    font18 = pg.font.Font('res/font/arialbi.ttf', 18)
+    font30 = pg.font.Font('res/font/segoeprb.ttf', 30)
+    font28 = pg.font.Font('res/font/segoeprb.ttf', 28)
+    font22 = pg.font.Font('res/font/segoeprb.ttf', 22)
+    font18 = pg.font.Font('res/font/segoeprb.ttf', 18)
     return font30, font28, font22, font18
 
 
@@ -21,39 +21,97 @@ def load_background():
     return bg
 
 
-def load_images():
-    kolobok_image_god = pg.image.load('res/graphics/kolobok_50x50_right.png').convert_alpha()
-    kolobok_image = pg.image.load('res/graphics/Kolobok_Ivan.png').convert_alpha()
-    kolobok_list = []
-    for i in range(1, 32):
-        kolobok_ = pg.transform.rotate(kolobok_image, -i * 11.6129)
-        kolobok = pg.transform.scale(kolobok_, (50, 50))  # Масштабирование
-        kolobok_list.append(kolobok)
+def load_images_kolobok():
+    kolobok_list = [[], [], []]
+    for i in range(1, 13):
+        kolobok = pg.image.load(f'res/graphics/colobok_{i:02}.png').convert_alpha()
+        kolobok_list[0].append(kolobok)
+        kolobok = pg.transform.flip(kolobok, True, False)
+        kolobok_list[1].append(kolobok)
+    kolobok = pg.transform.scale(kolobok, (25, 25))
+    kolobok_list[2].append(kolobok)
+    return kolobok_list
 
-    kolobok = [pg.transform.scale(kolobok_image_god, (20, 20)), \
-               pg.transform.scale(kolobok_image, (50, 50)), \
-               kolobok_list]
-    lisa_image = pg.image.load('res/graphics/lisa.png').convert_alpha()
-    lisa = pg.transform.scale(lisa_image, (282, 360))  # Масштабирование
-    medved_image = pg.image.load('res/graphics/medved01.png').convert_alpha()
-    medved = pg.transform.scale(medved_image, (160, 160))  # Масштабирование
-    medved = pg.transform.flip(medved, True, False)  # Отражение по горизонтали
-    zayac_image = pg.image.load('res/graphics/zayac01.png').convert_alpha()
-    zayac = pg.transform.scale(zayac_image, (282, 360))  # Масштабирование
 
-    return kolobok, lisa, medved, zayac
+def load_images_zayac():
+    # zayac_images = [[], []]
+    # for i in range(1, 5):
+    #     zayac = pg.image.load(f'res/graphics/zayac_{i:02}.png').convert_alpha()
+    #     zayac_images[0].append(zayac)
+    #     zayac = pg.transform.flip(zayac, True, False)
+    #     zayac_images[1].append(zayac)
+    zayac_images = [[
+    pg.image.load('res/graphics/zayac_01.png'),
+    pg.image.load('res/graphics/zayac_02.png'),
+    pg.image.load('res/graphics/zayac_03.png'),
+    pg.image.load('res/graphics/zayac_04.png')
+], [
+    pg.transform.flip(pg.image.load('res/graphics/zayac_01.png'), True, False),
+    pg.transform.flip(pg.image.load('res/graphics/zayac_02.png'), True, False),
+    pg.transform.flip(pg.image.load('res/graphics/zayac_03.png'), True, False),
+    pg.transform.flip(pg.image.load('res/graphics/zayac_04.png'), True, False)
+]]
+    return zayac_images
+
+
+def load_images_medved():
+    medved_images = [[
+    pg.image.load('res/graphics/medved_01.png'),
+    pg.image.load('res/graphics/medved_02.png'),
+    pg.image.load('res/graphics/medved_01.png'),
+    pg.image.load('res/graphics/medved_04.png')
+], [
+    pg.transform.flip(pg.image.load('res/graphics/medved_01.png'), True, False),
+    pg.transform.flip(pg.image.load('res/graphics/medved_02.png'), True, False),
+    pg.transform.flip(pg.image.load('res/graphics/medved_01.png'), True, False),
+    pg.transform.flip(pg.image.load('res/graphics/medved_04.png'), True, False)
+]]
+    return medved_images
+
+
+def load_images_lisa():
+    lisa_images = [[
+    pg.image.load('res/graphics/lisa_01.png'),
+    pg.image.load('res/graphics/lisa_02.png'),
+    pg.image.load('res/graphics/lisa_03.png'),
+    pg.image.load('res/graphics/lisa_04.png'),
+    pg.image.load('res/graphics/lisa_05.png'),
+    pg.image.load('res/graphics/lisa_06.png'),
+    pg.image.load('res/graphics/lisa_05.png'),
+    pg.image.load('res/graphics/lisa_04.png'),
+    pg.image.load('res/graphics/lisa_03.png'),
+    pg.image.load('res/graphics/lisa_02.png'),
+    pg.image.load('res/graphics/lisa_01.png'),
+    ], [
+    pg.transform.flip(pg.image.load('res/graphics/lisa_01.png'), True, False),
+    pg.transform.flip(pg.image.load('res/graphics/lisa_02.png'), True, False),
+    pg.transform.flip(pg.image.load('res/graphics/lisa_03.png'), True, False),
+    pg.transform.flip(pg.image.load('res/graphics/lisa_04.png'), True, False),
+    pg.transform.flip(pg.image.load('res/graphics/lisa_05.png'), True, False),
+    pg.transform.flip(pg.image.load('res/graphics/lisa_06.png'), True, False),
+    pg.transform.flip(pg.image.load('res/graphics/lisa_05.png'), True, False),
+    pg.transform.flip(pg.image.load('res/graphics/lisa_04.png'), True, False),
+    pg.transform.flip(pg.image.load('res/graphics/lisa_03.png'), True, False),
+    pg.transform.flip(pg.image.load('res/graphics/lisa_02.png'), True, False),
+    pg.transform.flip(pg.image.load('res/graphics/lisa_01.png'), True, False),
+    ]]
+    return lisa_images
 
 
 def load_music():
     music = [
-        'res/sounds/music_fon_01.mp3'
+        'res/sounds/music_fon_01.mp3',
+        'res/sounds/music_fon_02.mp3'
     ]
     return music
 
 
 def load_sound():
     sound = [
-        'res/sounds/teases01.wav'
+        'res/sounds/teases01.wav',
+        'res/sounds/priz.wav',
+        'res/sounds/Oj.mp3',
+        'res/sounds/new_level.mp3'
     ]
     return sound
 
@@ -64,3 +122,4 @@ GREY =(200, 200, 200)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
+YELLOW = (235, 155, 0)

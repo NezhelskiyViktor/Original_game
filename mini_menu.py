@@ -30,7 +30,7 @@ class MiniMenu:
         self.x = x
         self.y = y
         self.width = 300
-        self.height = 210
+        self.height = 220
         self.subsurface = screen.subsurface((x, y, self.width, self.height))  # Создание мини-окна
         _, _, _, self.font18 = res.load_fonts()
 
@@ -127,9 +127,9 @@ class MiniMenu:
         self.draw_text(self.music[self.music_index], self.font18,
                        yellow if self.active_index == 2 else red, self.subsurface, 120, 65)
         self.draw_text(str(self.sound_volume[self.s_v_index]), self.font18,
-                       yellow if self.active_index == 3 else red, self.subsurface, 200, 95)
+                       yellow if self.active_index == 3 else red, self.subsurface, 220, 95)
         self.draw_text(str(self.music_volume[self.m_v_index]), self.font18,
-                       yellow if self.active_index == 4 else red, self.subsurface, 200, 125)
+                       yellow if self.active_index == 4 else red, self.subsurface, 220, 125)
         self.draw_text(self.show_move[self.show_move_index], self.font18,
                        yellow if self.active_index == 5 else red, self.subsurface, 220, 155)
         self.draw_text(self.game_states[self.game_state_index], self.font18,

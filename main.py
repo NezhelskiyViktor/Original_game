@@ -4,7 +4,7 @@ import settings               # Конфигурационные настрой�
 import move
 import game.game_database as db  #
 from game.engine import GameEngine  # Основные механики игры
-from game.levels_game import Levels_game
+from game.levels_game import LevelsGame
 import game.end_game as end
 
 
@@ -25,29 +25,17 @@ if __name__ == '__main__':
 
     if settings.show_move:
         move.run_move(screen)
-
+    # Начало игры с колобком на дереве и настройками игры
     game = GameEngine(settings)
     message = game.run(screen)
-
-    '''
-    чисто на время отладки
-
-    db.update_game_state(
-        settings.difficulty_level,
-        1,
-        0,
-        0,
-        5)
-        '''
-
-
+    # Обращиемся к базе данных за значениями сохранёнными после предыдущей игры
     game_state = db.get_game_state()
-    level_index = game_state['current_level']
-    # Если в мини меню выбрана новая игра или текущий уровень больше 4, то начинаем с первого
-    if settings.game_state == 0 or level_index > 4:
+    level_index = game_state['current_level']  # Индекс текущего уровня
+    # Если в мини меню выбрана новая игра или текущий уровень больше 3, то начинаем с первого уровня
+    if settings.game_state == 0 or level_index > 3:
         level_index = 1
         settings.game_state = 1   # В следующий раз в меню пусть будет сохраненная игра
-        db.update_game_state(                   # здесь надо обнулить все настройки, потому что начинается новая игра
+        db.update_game_state(     # здесь надо обнулить все настройки, потому что начинается новая игра
             settings.difficulty_level,
             1,
             0,
@@ -55,12 +43,13 @@ if __name__ == '__main__':
             5)
 
     # Запуск основного цикла игры
+    time_start = pg.time.get_ticks()  # время начала игры
     running = True
-    while running and level_index <=4:
-        game = Levels_game(settings, db.get_game_state())
+    while running and level_index <= 3:
+        game = LevelsGame(settings, db.get_game_state(), time_start)
         running, formatted_time, lives, score, level_index = game.run_game(screen)
 
-    # Завершение работы
+    # Сохраняем настройки мини-меню в базу данных
     db.update_settings(
         settings.music,
         settings.sound,
@@ -70,6 +59,8 @@ if __name__ == '__main__':
         settings.difficulty_level
     )
 
+    # Сохраняем состояние игры в базу данных
+    lives = 5 if lives == 0 else lives
     db.update_game_state(
         settings.difficulty_level,
         level_index,
@@ -77,12 +68,13 @@ if __name__ == '__main__':
         formatted_time,
         lives)
 
-    if running:
+    if running:  # Если игра завершена не через закрытие окна, то выходим на окно успешного окончания.
         end_game = end.End_game(settings)
         end_game.run(screen)
+        # print('Все уровни пройдены')
 
-    print(f'Все уровни пройдены, текущий уровень = {level_index}')
-    print(f"Время игры: {formatted_time}, набрано {score} очков. Количество жизней: {lives}.")
-    #print(f"Записано состояние игры перед выходом. self.current_level = {level_index}")
+#    print(f"Текущий уровень = {level_index}, Время игры: {formatted_time}, \
+#     набрано {score} очков. Количество жизней: {lives}.")
+
     pg.quit()
 

@@ -22,7 +22,7 @@ class End_game:
         self.clock = pg.time.Clock()
         _, self.font28, _, self.font18 = res.load_fonts()
         self.bg = res.load_background()[4], res.load_background()[5]
-        self.kolobok, _, _, _ = res.load_images()
+        self.kolobok = res.load_images_kolobok()
         self.music = self.settings.music
         self.music_volume = self.settings.music_volume
 
@@ -46,22 +46,22 @@ class End_game:
                 if self.kolobok_x > screen.get_width():
                     self.etap += 1
                     self.kolobok_x = -50
-                    self.kolobok_y = 343
+                    self.kolobok_y = 337
             else:
                 if self.kolobok_x > 210:
-                    self.kolobok_x = 233
+                    self.kolobok_x = 238
                     self.x_speed = 0
                     self.kolobok_running = False
             self.clock.tick(60)
 
     def render(self, screen):
         screen.blit(self.bg[self.etap], (0, 0))
-        if not self.kolobok_running:
-            screen.blit(self.kolobok[0], (self.kolobok_x, self.kolobok_y))
-            screen.blit(self.font28.render('Колобок вернулься домой!',
-                                           True, pg.Color(255, 0, 0)), (340, 5))
+        if self.kolobok_running:
+            screen.blit(self.kolobok[0][(self.kolobok_x // 5) % 12], (int(self.kolobok_x), int(self.kolobok_y)))
         else:
-            screen.blit(self.kolobok[2][(self.kolobok_x // 5) % 31], (int(self.kolobok_x), int(self.kolobok_y)))
+            screen.blit(self.kolobok[2][0], (self.kolobok_x, self.kolobok_y))
+            screen.blit(self.font28.render('Ура! Колобок вернулься домой!',
+                                           True, pg.Color(255, 0, 0)), (340, 5))
 
         pg.display.flip()
 
